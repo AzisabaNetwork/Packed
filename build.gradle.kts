@@ -1,5 +1,6 @@
 plugins {
-    kotlin("jvm") version "2.2.21"
+    kotlin("jvm") version libs.versions.kotlin.get()
+    kotlin("plugin.serialization") version libs.versions.kotlin.get()
 }
 
 group = "com.tksimeji"
@@ -10,6 +11,8 @@ repositories {
 }
 
 dependencies {
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.net.kyori.adventure.api)
     testImplementation(kotlin("test"))
 }
 
