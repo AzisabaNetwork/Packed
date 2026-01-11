@@ -1,5 +1,6 @@
 package com.tksimeji.packed.models
 
+import com.tksimeji.packed.PackDirection
 import com.tksimeji.packed.Vector3icSerializer
 import com.tksimeji.packed.Vector4fcSerializer
 import kotlinx.serialization.SerialName
@@ -13,7 +14,7 @@ data class PackElement(
     val from: Vector3ic,
     @Serializable(with = Vector3icSerializer::class)
     val to: Vector3ic,
-    val faces: Map<PackFaceKey, PackFace> = emptyMap(),
+    val faces: Map<PackDirection, PackFace> = emptyMap(),
     val rotation: PackRotation? = null,
     val shade: Boolean? = null,
     val lightEmission: Int,
@@ -46,47 +47,5 @@ data class PackFace(
     val uv: Vector4fc,
     val rotation: Int,
     val tintindex: Int? = null,
-    val cullface: PackCullFace? = null,
+    val cullface: PackDirection? = null,
 )
-
-@Serializable
-enum class PackFaceKey {
-    @SerialName("down")
-    DOWN,
-
-    @SerialName("up")
-    UP,
-
-    @SerialName("north")
-    NORTH,
-
-    @SerialName("south")
-    SOUTH,
-
-    @SerialName("west")
-    WEST,
-
-    @SerialName("east")
-    EAST,
-}
-
-@Serializable
-enum class PackCullFace {
-    @SerialName("down")
-    DOWN,
-
-    @SerialName("up")
-    UP,
-
-    @SerialName("north")
-    NORTH,
-
-    @SerialName("south")
-    SOUTH,
-
-    @SerialName("west")
-    WEST,
-
-    @SerialName("east")
-    EAST,
-}

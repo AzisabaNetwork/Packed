@@ -2,20 +2,30 @@ package com.tksimeji.packed
 
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.descriptors.PrimitiveKind
-import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
-import kotlinx.serialization.descriptors.SerialDescriptor
-import kotlinx.serialization.descriptors.StructureKind
-import kotlinx.serialization.descriptors.buildSerialDescriptor
+import kotlinx.serialization.descriptors.*
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import net.kyori.adventure.key.Key
+import net.kyori.adventure.util.RGBLike
 import org.joml.Vector3ic
 import org.joml.Vector4fc
+import kotlin.reflect.KClass
 
 internal abstract class PackedSerializer<T> : KSerializer<T> {
     override fun deserialize(decoder: Decoder): T =
         throw UnsupportedOperationException("Packed only supports serialization, not deserialization.")
+}
+
+internal abstract class EnumSerializer<T : Enum<T>>(private val kClass: KClass<T>) : PackedSerializer<T>() {
+    override val descriptor: SerialDescriptor =
+        PrimitiveSerialDescriptor(kClass.simpleName ?: "Enum", PrimitiveKind.STRING)
+
+    override fun serialize(encoder: Encoder, value: T) {
+        val snakeCase = value.name
+            .replace(Regex("([a-z0-9])([A-Z])"), "$1_$2")
+            .lowercase()
+        encoder.encodeString(snakeCase)
+    }
 }
 
 internal object KeySerializer : PackedSerializer<Key>() {
@@ -23,6 +33,23 @@ internal object KeySerializer : PackedSerializer<Key>() {
 
     override fun serialize(encoder: Encoder, value: Key) {
         encoder.encodeString("${value.namespace()}:${value.value()}")
+    }
+}
+
+internal object RGBLikeSerializer : PackedSerializer<RGBLike>() {
+    @OptIn(InternalSerializationApi::class)
+    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("RGBLike", PrimitiveKind.INT)
+
+    override fun serialize(encoder: Encoder, value: RGBLike) {
+        val red = value.red()
+        val green = value.green()
+        val blue = value.blue()
+
+        require(red in 0..255 && green in 0..255 && blue in 0..255) {
+            "RGB must be 0..255"
+        }
+
+        encoder.encodeInt((red shl 16) or (green shl 8) or blue)
     }
 }
 
