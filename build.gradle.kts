@@ -13,6 +13,7 @@ repositories {
 dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.net.kyori.adventure.api)
+    implementation(libs.org.joml.joml)
     testImplementation(kotlin("test"))
 }
 

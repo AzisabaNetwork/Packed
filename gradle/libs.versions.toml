@@ -2,7 +2,9 @@
 kotlin = "2.3.0"
 kotlinx-serialization-json = "1.10.0-RC"
 adventure = "4.25.0"
+joml = "1.10.8"
 
 [libraries]
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 net-kyori-adventure-api = { module = "net.kyori:adventure-api", version.ref = "adventure" }
+org-joml-joml = { module = "org.joml:joml", version.ref = "joml" }
