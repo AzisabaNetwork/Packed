@@ -12,6 +12,45 @@ import kotlinx.serialization.encoding.Encoder
 import net.kyori.adventure.key.Key
 
 @Serializable
+sealed interface PackFontProvider {
+    val type: String
+
+    val filter: PackFontFilter?
+}
+
+@Serializable
+data class PackBitmapFontProvider(
+    @Serializable(with = KeySerializer::class)
+    val file: Key,
+    val chars: List<String>,
+    val ascent: Int,
+    val height: Int,
+    override val filter: PackFontFilter? = null,
+) : PackFontProvider {
+    @EncodeDefault
+    override val type: String = "bitmap"
+}
+
+@Serializable
+data class PackReferenceFontProvider(
+    @Serializable(with = KeySerializer::class)
+    val id: Key,
+    override val filter: PackFontFilter? = null,
+) : PackFontProvider {
+    @EncodeDefault
+    override val type: String = "reference"
+}
+
+@Serializable
+data class PackSpaceFontProvider(
+    val advances: Map<Char, Int>,
+    override val filter: PackFontFilter? = null,
+) : PackFontProvider {
+    @EncodeDefault
+    override val type: String = "space"
+}
+
+@Serializable
 data class PackTtfFontProvider(
     @Serializable(with = KeySerializer::class)
     val file: Key,
@@ -38,4 +77,23 @@ data class PackTtfFontProvider(
             composite.endStructure(descriptor)
         }
     }
+}
+
+@Serializable
+data class PackUnihexFontProvider(
+    @Serializable(with = KeySerializer::class)
+    val hexFile: Key,
+    val sizeOverrides: List<SizeOverride> = emptyList(),
+    override val filter: PackFontFilter? = null,
+) : PackFontProvider {
+    @EncodeDefault
+    override val type: String = "unihex"
+
+    @Serializable
+    data class SizeOverride(
+        val from: String,
+        val to: String,
+        val left: Int,
+        val right: Int,
+    )
 }
