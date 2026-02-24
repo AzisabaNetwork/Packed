@@ -1,8 +1,8 @@
-package com.tksimeji.packed.models
+package net.azisaba.packed.models
 
-import com.tksimeji.packed.PackDirection
-import com.tksimeji.packed.Vector3icSerializer
-import com.tksimeji.packed.Vector4fcSerializer
+import net.azisaba.packed.PackDirection
+import net.azisaba.packed.Vector3icSerializer
+import net.azisaba.packed.Vector4fcSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.joml.Vector3ic

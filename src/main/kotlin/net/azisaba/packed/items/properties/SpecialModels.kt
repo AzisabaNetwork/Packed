@@ -1,8 +1,8 @@
-package com.tksimeji.packed.items.properties
+package net.azisaba.packed.items.properties
 
-import com.tksimeji.packed.EnumSerializer
-import com.tksimeji.packed.KeySerializer
-import com.tksimeji.packed.PackDirection
+import net.azisaba.packed.EnumSerializer
+import net.azisaba.packed.KeySerializer
+import net.azisaba.packed.PackDirection
 import kotlinx.serialization.EncodeDefault
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

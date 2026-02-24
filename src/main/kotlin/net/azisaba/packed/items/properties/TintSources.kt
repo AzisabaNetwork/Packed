@@ -1,7 +1,7 @@
-package com.tksimeji.packed.items.properties
+package net.azisaba.packed.items.properties
 
-import com.tksimeji.packed.KeySerializer
-import com.tksimeji.packed.RGBLikeSerializer
+import net.azisaba.packed.KeySerializer
+import net.azisaba.packed.RGBLikeSerializer
 import kotlinx.serialization.EncodeDefault
 import kotlinx.serialization.Serializable
 import net.kyori.adventure.key.Key

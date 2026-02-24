@@ -1,7 +1,7 @@
-package com.tksimeji.packed.font.provider
+package net.azisaba.packed.font.provider
 
-import com.tksimeji.packed.KeySerializer
-import com.tksimeji.packed.PackedSerializer
+import net.azisaba.packed.KeySerializer
+import net.azisaba.packed.PackedSerializer
 import kotlinx.serialization.EncodeDefault
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable

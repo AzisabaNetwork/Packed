@@ -1,3 +1,3 @@
-package com.tksimeji.packed.equipment
+package net.azisaba.packed.equipment
 
 typealias PackEquipmentModel = Map<PackEquipmentLayerKey, PackEquipmentLayer>

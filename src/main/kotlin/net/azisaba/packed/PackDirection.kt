@@ -1,4 +1,4 @@
-package com.tksimeji.packed
+package net.azisaba.packed
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

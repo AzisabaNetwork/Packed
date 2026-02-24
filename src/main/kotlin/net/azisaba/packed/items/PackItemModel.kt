@@ -1,6 +1,6 @@
-package com.tksimeji.packed.items
+package net.azisaba.packed.items
 
-import com.tksimeji.packed.items.properties.PackItemModelProperties
+import net.azisaba.packed.items.properties.PackItemModelProperties
 import kotlinx.serialization.Serializable
 
 @Serializable

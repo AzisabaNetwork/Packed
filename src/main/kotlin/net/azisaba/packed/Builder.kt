@@ -1,9 +1,9 @@
-package com.tksimeji.packed
+package net.azisaba.packed
 
-import com.tksimeji.packed.equipment.PackEquipmentModel
-import com.tksimeji.packed.font.PackFont
-import com.tksimeji.packed.items.PackItemModel
-import com.tksimeji.packed.models.PackModel
+import net.azisaba.packed.equipment.PackEquipmentModel
+import net.azisaba.packed.font.PackFont
+import net.azisaba.packed.items.PackItemModel
+import net.azisaba.packed.models.PackModel
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.ClassDiscriminatorMode
 import kotlinx.serialization.json.Json

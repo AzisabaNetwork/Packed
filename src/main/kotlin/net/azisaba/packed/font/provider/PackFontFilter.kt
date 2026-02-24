@@ -1,4 +1,4 @@
-package com.tksimeji.packed.font.provider
+package net.azisaba.packed.font.provider
 
 import kotlinx.serialization.Serializable
 
