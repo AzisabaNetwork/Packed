@@ -5,7 +5,12 @@ import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.*
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonEncoder
+import kotlinx.serialization.json.JsonObject
 import net.kyori.adventure.key.Key
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.serializer.json.JSONComponentSerializer
 import net.kyori.adventure.util.RGBLike
 import org.joml.Vector3ic
 import org.joml.Vector4fc
@@ -33,6 +38,19 @@ internal object KeySerializer : PackedSerializer<Key>() {
 
     override fun serialize(encoder: Encoder, value: Key) {
         encoder.encodeString("${value.namespace()}:${value.value()}")
+    }
+}
+
+internal object ComponentSerializer : PackedSerializer<Component>() {
+    override val descriptor: SerialDescriptor = buildClassSerialDescriptor("Component") {
+        element<JsonObject>("json")
+    }
+
+    override fun serialize(encoder: Encoder, value: Component) {
+        require(encoder is JsonEncoder) { "This serializer only works with JSON format" }
+        val jsonString = JSONComponentSerializer.json().serialize(value)
+        val jsonElement = Json.parseToJsonElement(jsonString)
+        encoder.encodeJsonElement(jsonElement)
     }
 }
 
