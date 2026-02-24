@@ -12,11 +12,17 @@ import net.azisaba.packed.sounds.PackSoundEvent
 import net.azisaba.packed.sounds.createSoundsJson
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.key.Namespaced
+import java.net.URI
+import java.nio.file.FileSystems
+import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.StandardCopyOption
 import kotlin.io.path.createDirectories
 import kotlin.io.path.createFile
 import kotlin.io.path.exists
+import kotlin.io.path.isDirectory
 import kotlin.io.path.writeText
+import kotlin.reflect.KClass
 
 @OptIn(ExperimentalSerializationApi::class)
 private val json: Json = Json {
@@ -35,6 +41,8 @@ class PackBuilder internal constructor() {
     internal var itemModelMap: Map<Key, PackItemModel> = emptyMap()
     internal var modelMap: Map<Key, PackModel> = emptyMap()
     internal var soundMap: Map<Key, PackSoundEvent> = emptyMap()
+
+    internal val includedResources: MutableSet<KClass<*>> = mutableSetOf()
 
     fun equipment(map: () -> Map<Key, PackEquipmentModel>) {
         equipmentModelMap = map().toMap()
@@ -55,10 +63,14 @@ class PackBuilder internal constructor() {
     fun sounds(map: () -> Map<Key, PackSoundEvent>) {
         soundMap = map().toMap()
     }
+
+    fun includeResources(kClass: KClass<*>) {
+        includedResources += kClass
+    }
 }
 
 internal class PathResolver(rootPath: Path) {
-    private val assetsPath: Path by lazy {
+    val assetsPath: Path by lazy {
         val path = rootPath.resolve("assets")
         if (!path.exists()) {
             path.createDirectories()
@@ -98,7 +110,10 @@ fun packed(output: Path, block: PackBuilder.() -> Unit) {
     createJsonAssets(pathResolver, "font", builder.fontMap)
     createJsonAssets(pathResolver, "items", builder.itemModelMap)
     createJsonAssets(pathResolver, "models", builder.modelMap)
+
     createSoundsJson(pathResolver, json, builder.soundMap)
+
+    builder.includedResources.forEach { copyResources(pathResolver, it) }
 }
 
 private inline fun <reified T : Any> createJsonAssets(pathResolver: PathResolver, pathPrefix: String, map: Map<Key, T>) {
@@ -106,5 +121,25 @@ private inline fun <reified T : Any> createJsonAssets(pathResolver: PathResolver
         val path = pathResolver.filePath(key, pathPrefix, ".json")
         val jsonString = json.encodeToString(value)
         path.writeText(jsonString)
+    }
+}
+
+private fun copyResources(pathResolver: PathResolver, kClass: KClass<*>) {
+    val javaClass = kClass.java
+    val jarUri = javaClass.protectionDomain.codeSource.location.toURI()
+    val jarFsUri = URI.create("jar:$jarUri")
+
+    FileSystems.newFileSystem(jarFsUri, emptyMap<String, Any>()).use { fs ->
+        val assetsPath = fs.getPath("/assets")
+        if (!assetsPath.exists()) return@use
+
+        Files.walk(assetsPath).forEach { assetPath ->
+            val outputPath = pathResolver.assetsPath.resolve(assetsPath.relativize(assetPath))
+            if (assetPath.isDirectory()) {
+                assetPath.createDirectories()
+            } else {
+                Files.copy(assetPath, outputPath, StandardCopyOption.REPLACE_EXISTING)
+            }
+        }
     }
 }
