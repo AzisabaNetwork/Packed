@@ -8,6 +8,8 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.ClassDiscriminatorMode
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonNamingStrategy
+import net.azisaba.packed.sounds.PackSoundEvent
+import net.azisaba.packed.sounds.createSoundsJson
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.key.Namespaced
 import java.nio.file.Path
@@ -32,6 +34,7 @@ class PackBuilder internal constructor() {
     internal var fontMap: Map<Key, PackFont> = emptyMap()
     internal var itemModelMap: Map<Key, PackItemModel> = emptyMap()
     internal var modelMap: Map<Key, PackModel> = emptyMap()
+    internal var soundMap: Map<Key, PackSoundEvent> = emptyMap()
 
     fun equipment(map: () -> Map<Key, PackEquipmentModel>) {
         equipmentModelMap = map().toMap()
@@ -48,9 +51,13 @@ class PackBuilder internal constructor() {
     fun models(map: () -> Map<Key, PackModel>) {
         modelMap = map().toMap()
     }
+
+    fun sounds(map: () -> Map<Key, PackSoundEvent>) {
+        soundMap = map().toMap()
+    }
 }
 
-private class PathResolver(rootPath: Path) {
+internal class PathResolver(rootPath: Path) {
     private val assetsPath: Path by lazy {
         val path = rootPath.resolve("assets")
         if (!path.exists()) {
@@ -65,11 +72,11 @@ private class PathResolver(rootPath: Path) {
     fun dirPath(key: Key, prefix: String = ""): Path =
         resolveNamespacedPath(key, "$prefix/${key.value()}").createDirectories()
 
-    fun namespacePath(namespace: Namespaced): Path {
-        val path = assetsPath.resolve(namespace.namespace())
-        return if (!path.exists()) {
-            path.createDirectories()
-        } else path
+    fun namespacePath(namespace: Namespaced): Path = namespacePath(namespace.namespace())
+
+    fun namespacePath(namespace: String): Path {
+        val path = assetsPath.resolve(namespace)
+        return if (!path.exists()) path.createDirectories() else path
     }
 
     private fun resolveNamespacedPath(namespace: Namespaced, relativePath: String): Path {
@@ -91,6 +98,7 @@ fun packed(output: Path, block: PackBuilder.() -> Unit) {
     createJsonAssets(pathResolver, "font", builder.fontMap)
     createJsonAssets(pathResolver, "items", builder.itemModelMap)
     createJsonAssets(pathResolver, "models", builder.modelMap)
+    createSoundsJson(pathResolver, json, builder.soundMap)
 }
 
 private inline fun <reified T : Any> createJsonAssets(pathResolver: PathResolver, pathPrefix: String, map: Map<Key, T>) {
