@@ -1,6 +1,6 @@
 package net.azisaba.packed.models
 
-import net.azisaba.packed.util.PackDirection
+import net.azisaba.packed.PackDirection
 import net.azisaba.packed.util.Vector3icSerializer
 import net.azisaba.packed.util.Vector4fcSerializer
 import kotlinx.serialization.SerialName

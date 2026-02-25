@@ -7,9 +7,9 @@ import net.azisaba.packed.items.PackItemModel
 import net.azisaba.packed.models.PackModel
 import net.azisaba.packed.sounds.PackSoundEvent
 import net.azisaba.packed.util.KeyedPackResource
-import net.azisaba.packed.util.PackFormat
-import net.azisaba.packed.util.PackFormatRange
-import net.azisaba.packed.util.PackMetadata
+import net.azisaba.packed.PackFormat
+import net.azisaba.packed.PackFormatRange
+import net.azisaba.packed.PackMetadata
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.key.Namespaced
 import net.kyori.adventure.text.Component

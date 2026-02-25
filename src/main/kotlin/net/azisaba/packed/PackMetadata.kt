@@ -1,6 +1,7 @@
-package net.azisaba.packed.util
+package net.azisaba.packed
 
 import kotlinx.serialization.Serializable
+import net.azisaba.packed.util.ComponentSerializer
 import net.kyori.adventure.text.Component
 
 @Serializable

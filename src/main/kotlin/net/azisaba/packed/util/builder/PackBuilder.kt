@@ -1,15 +1,18 @@
-package net.azisaba.packed
+package net.azisaba.packed.util.builder
 
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.ClassDiscriminatorMode
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonNamingStrategy
+import net.azisaba.packed.Pack
+import net.azisaba.packed.PackResourceType
 import net.azisaba.packed.util.PackPathResolver
 import net.azisaba.packed.util.SimplePathResolver
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
+import kotlin.collections.iterator
 import kotlin.io.path.createDirectories
 
 @OptIn(ExperimentalSerializationApi::class)
