@@ -24,12 +24,17 @@ data class Packed(
     @Suppress("UNCHECKED_CAST")
     fun <R : Any> resourceSet(type: Type<R>): Set<R> = resourceMap[type] as? Set<R> ?: emptySet()
 
+    fun interface Type<R : Any> {
+        fun build(json: Json, pathResolver: PackPathResolver, resourceSet: Set<R>)
+    }
+
     companion object BuiltinTypes {
         val EQUIPMENT_MODEL: Type<IdentifiedResource<PackEquipmentModel>> = jsonPerFileType("equipment")
         val FONT: Type<IdentifiedResource<PackFont>> = jsonPerFileType("font")
         val ITEM_MODEL: Type<IdentifiedResource<PackItemModel>> = jsonPerFileType("items")
         val MODEL: Type<IdentifiedResource<PackModel>> = jsonPerFileType("models")
         val SOUND_EVENT: Type<IdentifiedResource<PackSoundEvent>> = Type(::buildSoundsJson)
+
         val PLUGIN_RESOURCES: Type<Plugin> = Type(::buildPluginResources)
 
         private inline fun <reified R : IdentifiedResource<*>> jsonPerFileType(pathPrefix: String): Type<R> =
@@ -51,7 +56,6 @@ data class Packed(
                 jsonFile.writeText(jsonString)
             }
         }
-
         private fun buildPluginResources(json: Json, pathResolver: PackPathResolver, resourceSet: Set<Plugin>) {
             for (plugin in resourceSet) {
                 val javaClass = plugin.javaClass
@@ -76,9 +80,5 @@ data class Packed(
                 }
             }
         }
-    }
-
-    fun interface Type<R : Any> {
-        fun build(json: Json, pathResolver: PackPathResolver, resourceSet: Set<R>)
     }
 }

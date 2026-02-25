@@ -2,7 +2,10 @@
 kotlin = "2.3.0"
 kotlinx-serialization-json = "1.10.0-RC"
 paper = "1.21.11-R0.1-SNAPSHOT"
+ktor = "3.4.0"
 
 [libraries]
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 io-papermc-paper-api = { module = "io.papermc.paper:paper-api", version.ref = "paper" }
+ktor-server-core = { module = "io.ktor:ktor-server-core", version.ref = "ktor" }
+ktor-server-netty = { module = "io.ktor:ktor-server-netty", version.ref = "ktor" }
