@@ -1,4 +1,4 @@
-package net.azisaba.packed.dsl
+package net.azisaba.packed.util.dsl
 
 import net.azisaba.packed.*
 import net.azisaba.packed.equipment.PackEquipmentModel
