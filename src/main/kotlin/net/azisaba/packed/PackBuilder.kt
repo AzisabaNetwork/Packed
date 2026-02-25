@@ -6,6 +6,8 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonNamingStrategy
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.key.Namespaced
+import java.net.URI
+import java.nio.file.FileSystems
 import java.nio.file.Path
 import kotlin.io.path.createDirectories
 import kotlin.io.path.createFile
@@ -18,15 +20,22 @@ private val defaultJson: Json = Json {
     classDiscriminatorMode = ClassDiscriminatorMode.NONE
 }
 
-fun Packed.build(path: Path, json: Json = defaultJson) {
-    val pathResolver = SimplePathResolver(path)
+fun Packed.build(path: Path, json: Json = defaultJson) =
+    buildWithPathResolver(SimplePathResolver(path), json)
+
+fun Packed.buildZip(zipPath: Path, json: Json = defaultJson) {
+    val uri = URI.create("jar:${zipPath.toUri()}")
+    val env = mapOf("create" to "true")
+
+    FileSystems.newFileSystem(uri, env).use { zipFs ->
+        buildWithPathResolver(SimplePathResolver(zipFs.getPath("/")), json)
+    }
+}
+
+private fun Packed.buildWithPathResolver(pathResolver: PackPathResolver, json: Json) {
     for ((type, set) in resourceMap) {
         @Suppress("UNCHECKED_CAST")
-        (type as Packed.Type<Any>).build(
-            json,
-            pathResolver,
-            set as Set<Any>
-        )
+        (type as Packed.Type<Any>).build(json, pathResolver, set as Set<Any>)
     }
 }
 
