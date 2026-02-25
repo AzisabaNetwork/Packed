@@ -17,21 +17,23 @@ import kotlin.io.path.exists
 import kotlin.io.path.isDirectory
 import kotlin.io.path.writeText
 
-data class Packed(val resourceMap: Map<ResourceType<*>, Set<*>>) {
+data class Packed(
+    val metadata: PackMetadata,
+    val resourceMap: Map<Type<*>, Set<*>> = emptyMap(),
+) {
     @Suppress("UNCHECKED_CAST")
-    fun <R : Any> resourceSet(resourceType: ResourceType<R>): Set<R> =
-        resourceMap[resourceType] as? Set<R> ?: emptySet()
+    fun <R : Any> resourceSet(type: Type<R>): Set<R> = resourceMap[type] as? Set<R> ?: emptySet()
 
     companion object BuiltinTypes {
-        val EQUIPMENT_MODEL: ResourceType<IdentifiedResource<PackEquipmentModel>> = jsonPerFileType("equipment")
-        val FONT: ResourceType<IdentifiedResource<PackFont>> = jsonPerFileType("font")
-        val ITEM_MODEL: ResourceType<IdentifiedResource<PackItemModel>> = jsonPerFileType("items")
-        val MODEL: ResourceType<IdentifiedResource<PackModel>> = jsonPerFileType("models")
-        val SOUND_EVENT: ResourceType<IdentifiedResource<PackSoundEvent>> = ResourceType(::buildSoundsJson)
-        val PLUGIN_RESOURCES: ResourceType<Plugin> = ResourceType(::buildPluginResources)
+        val EQUIPMENT_MODEL: Type<IdentifiedResource<PackEquipmentModel>> = jsonPerFileType("equipment")
+        val FONT: Type<IdentifiedResource<PackFont>> = jsonPerFileType("font")
+        val ITEM_MODEL: Type<IdentifiedResource<PackItemModel>> = jsonPerFileType("items")
+        val MODEL: Type<IdentifiedResource<PackModel>> = jsonPerFileType("models")
+        val SOUND_EVENT: Type<IdentifiedResource<PackSoundEvent>> = Type(::buildSoundsJson)
+        val PLUGIN_RESOURCES: Type<Plugin> = Type(::buildPluginResources)
 
-        private inline fun <reified R : IdentifiedResource<*>> jsonPerFileType(pathPrefix: String): ResourceType<R> =
-            ResourceType { json, pathResolver, resourceSet ->
+        private inline fun <reified R : IdentifiedResource<*>> jsonPerFileType(pathPrefix: String): Type<R> =
+            Type { json, pathResolver, resourceSet ->
                 resourceSet.associateBy { it.key }.forEach { (key, value) ->
                     val path = pathResolver.filePath(key, pathPrefix, ".json")
                     val jsonString = json.encodeToString(value)
@@ -76,7 +78,7 @@ data class Packed(val resourceMap: Map<ResourceType<*>, Set<*>>) {
         }
     }
 
-    fun interface ResourceType<R : Any> {
+    fun interface Type<R : Any> {
         fun build(json: Json, pathResolver: PackPathResolver, resourceSet: Set<R>)
     }
 }

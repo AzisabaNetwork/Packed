@@ -22,7 +22,7 @@ fun Packed.build(path: Path, json: Json = defaultJson) {
     val pathResolver = SimplePathResolver(path)
     for ((type, set) in resourceMap) {
         @Suppress("UNCHECKED_CAST")
-        (type as Packed.ResourceType<Any>).build(
+        (type as Packed.Type<Any>).build(
             json,
             pathResolver,
             set as Set<Any>
