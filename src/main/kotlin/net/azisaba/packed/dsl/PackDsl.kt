@@ -6,17 +6,22 @@ import net.azisaba.packed.font.PackFont
 import net.azisaba.packed.items.PackItemModel
 import net.azisaba.packed.models.PackModel
 import net.azisaba.packed.sounds.PackSoundEvent
+import net.azisaba.packed.util.KeyedPackResource
+import net.azisaba.packed.util.PackFormat
+import net.azisaba.packed.util.PackFormatRange
+import net.azisaba.packed.util.PackMetadata
 import net.kyori.adventure.key.Key
+import net.kyori.adventure.key.Namespaced
 import net.kyori.adventure.text.Component
 import org.bukkit.plugin.Plugin
 
-fun packed(block: PackedBuilder.() -> Unit): Packed = PackedBuilder().apply(block).build()
+fun packed(block: PackBuilder.() -> Unit): Pack = PackBuilder().apply(block).build()
 
 @DslMarker
-annotation class PackedDsl
+annotation class PackDsl
 
-@PackedDsl
-class PackedBuilder internal constructor() {
+@PackDsl
+class PackBuilder internal constructor() {
     private val metadataScope: MetadataScope = MetadataScope()
     private val pluginsScope: PluginsScope = PluginsScope()
     private val namespaceScopes: MutableList<NamespaceScope> = mutableListOf()
@@ -29,12 +34,15 @@ class PackedBuilder internal constructor() {
         pluginsScope.apply(block)
     }
 
+    fun namespace(namespace: Namespaced, block: NamespaceScope.() -> Unit) =
+        namespace(namespace.namespace(), block)
+
     fun namespace(namespace: String, block: NamespaceScope.() -> Unit) {
         namespaceScopes += NamespaceScope(namespace).apply(block)
     }
 
-    fun build(): Packed {
-        val merged = mutableMapOf<Packed.Type<*>, MutableSet<*>>()
+    fun build(): Pack {
+        val merged = mutableMapOf<PackResourceType<*>, MutableSet<*>>()
 
         for (namespaceScope in namespaceScopes) {
             for ((type, resourceSet) in namespaceScope.toMap()) {
@@ -46,20 +54,20 @@ class PackedBuilder internal constructor() {
 
         if (pluginsScope.isNotEmpty()) {
             @Suppress("UNCHECKED_CAST")
-            val bucket = merged.getOrPut(Packed.PLUGIN_RESOURCES) {
+            val bucket = merged.getOrPut(PackResourceTypes.PLUGIN_RESOURCE) {
                 mutableSetOf<Plugin>()
             } as MutableSet<Plugin>
             bucket.addAll(pluginsScope.toPluginSet())
         }
 
-        return Packed(
+        return Pack(
             metadataScope.toMetadata(),
             merged.mapValues { it.value.toSet() }
         )
     }
 }
 
-@PackedDsl
+@PackDsl
 class MetadataScope internal constructor() {
     private var packFormat: PackFormat? = null
 
@@ -102,7 +110,7 @@ class MetadataScope internal constructor() {
     )
 }
 
-@PackedDsl
+@PackDsl
 class PluginsScope internal constructor() {
     private val plugins: MutableSet<Plugin> = mutableSetOf()
 
@@ -115,36 +123,37 @@ class PluginsScope internal constructor() {
     internal fun isNotEmpty(): Boolean = plugins.isNotEmpty()
 }
 
-@PackedDsl
+@PackDsl
 class NamespaceScope internal constructor(private val namespace: String) {
-    private val resourceMap: MutableMap<Packed.Type<*>, MutableSet<Any>> = mutableMapOf()
+    private val resourceMap: MutableMap<PackResourceType<*>, MutableSet<Any>> = mutableMapOf()
 
-    fun equipment(block: ResourceScope<PackEquipmentModel>.() -> Unit) = register(Packed.EQUIPMENT_MODEL, block)
+    fun equipment(block: ResourceScope<PackEquipmentModel>.() -> Unit) =
+        register(PackResourceTypes.EQUIPMENT_MODEL, block)
 
-    fun font(block: ResourceScope<PackFont>.() -> Unit) = register(Packed.FONT, block)
+    fun font(block: ResourceScope<PackFont>.() -> Unit) = register(PackResourceTypes.FONT, block)
 
-    fun items(block: ResourceScope<PackItemModel>.() -> Unit) = register(Packed.ITEM_MODEL, block)
+    fun items(block: ResourceScope<PackItemModel>.() -> Unit) = register(PackResourceTypes.ITEM_MODEL, block)
 
-    fun models(block: ResourceScope<PackModel>.() -> Unit) = register(Packed.MODEL, block)
+    fun models(block: ResourceScope<PackModel>.() -> Unit) = register(PackResourceTypes.MODEL, block)
 
-    fun sounds(block: ResourceScope<PackSoundEvent>.() -> Unit) = register(Packed.SOUND_EVENT, block)
+    fun sounds(block: ResourceScope<PackSoundEvent>.() -> Unit) = register(PackResourceTypes.SOUND_EVENT, block)
 
-    internal fun toMap(): Map<Packed.Type<*>, Set<*>> = resourceMap.toMap()
+    internal fun toMap(): Map<PackResourceType<*>, Set<*>> = resourceMap.toMap()
 
-    private fun <R : Any> register(type: Packed.Type<IdentifiedResource<R>>, block: ResourceScope<R>.() -> Unit) {
+    private fun <R : Any> register(type: PackResourceType<KeyedPackResource<R>>, block: ResourceScope<R>.() -> Unit) {
         val scope = ResourceScope<R>(namespace).apply(block)
         val bucket = resourceMap.getOrPut(type) { mutableSetOf() }
         bucket.addAll(scope.toSet())
     }
 }
 
-@PackedDsl
+@PackDsl
 class ResourceScope<R : Any>(private val namespace: String) {
-    private val resourceSet: MutableSet<IdentifiedResource<R>> = mutableSetOf()
+    private val resourceSet: MutableSet<KeyedPackResource<R>> = mutableSetOf()
 
     operator fun String.invoke(value: R) {
-        resourceSet += IdentifiedResource(Key.key(namespace, this), value)
+        resourceSet += KeyedPackResource(Key.key(namespace, this), value)
     }
 
-    internal fun toSet(): Set<IdentifiedResource<R>> = resourceSet.toSet()
+    internal fun toSet(): Set<KeyedPackResource<R>> = resourceSet.toSet()
 }

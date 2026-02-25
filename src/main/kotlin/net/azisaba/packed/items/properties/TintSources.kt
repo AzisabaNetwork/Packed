@@ -1,7 +1,7 @@
 package net.azisaba.packed.items.properties
 
-import net.azisaba.packed.KeySerializer
-import net.azisaba.packed.RGBLikeSerializer
+import net.azisaba.packed.util.KeySerializer
+import net.azisaba.packed.util.RGBLikeSerializer
 import kotlinx.serialization.EncodeDefault
 import kotlinx.serialization.Serializable
 import net.kyori.adventure.key.Key

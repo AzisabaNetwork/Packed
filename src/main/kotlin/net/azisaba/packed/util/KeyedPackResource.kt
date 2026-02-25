@@ -1,8 +1,8 @@
-package net.azisaba.packed
+package net.azisaba.packed.util
 
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.key.Keyed
 
-data class IdentifiedResource<T>(val key: Key, val value: T) : Keyed {
+data class KeyedPackResource<T>(val key: Key, val value: T) : Keyed {
     override fun key(): Key = key
 }

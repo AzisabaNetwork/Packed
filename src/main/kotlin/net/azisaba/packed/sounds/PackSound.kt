@@ -2,7 +2,7 @@ package net.azisaba.packed.sounds
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import net.azisaba.packed.KeySerializer
+import net.azisaba.packed.util.KeySerializer
 import net.kyori.adventure.key.Key
 
 @Serializable
