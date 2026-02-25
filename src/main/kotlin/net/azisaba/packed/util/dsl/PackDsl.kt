@@ -137,12 +137,24 @@ class NamespaceScope internal constructor(private val namespace: String) {
 }
 
 @PackDsl
-class ResourceScope<R : Any>(private val namespace: String) {
-    private val resourceSet: MutableSet<KeyedPackResource<R>> = mutableSetOf()
+class ResourceScope<R : Any>(private val scopeNamespace: String) {
+    private val resources: MutableMap<Key, R> = mutableMapOf()
 
     operator fun String.invoke(value: R) {
-        resourceSet += KeyedPackResource(Key.key(namespace, this), value)
+        put(Key.key(scopeNamespace, this), value)
     }
 
-    internal fun toSet(): Set<KeyedPackResource<R>> = resourceSet.toSet()
+    operator fun Key.invoke(value: R) {
+        require(namespace() == scopeNamespace) {
+            "Key namespace mismatch: ${namespace()} (expected: $scopeNamespace)"
+        }
+        put(this, value)
+    }
+
+    private fun put(key: Key, value: R) {
+        check(resources.putIfAbsent(key, value) == null) { "Duplicate resource key: $key" }
+    }
+
+    internal fun toSet(): Set<KeyedPackResource<R>> =
+        resources.map { (key, value) -> KeyedPackResource(key, value) }.toSet()
 }
