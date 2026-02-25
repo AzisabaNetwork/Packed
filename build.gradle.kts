@@ -14,10 +14,10 @@ repositories {
 }
 
 dependencies {
+    api(libs.ktor.server.core)
+    api(libs.ktor.server.netty)
     compileOnly(libs.io.papermc.paper.api)
     implementation(libs.kotlinx.serialization.json)
-    implementation(libs.ktor.server.core)
-    implementation(libs.ktor.server.netty)
     testImplementation(kotlin("test"))
 }
 
