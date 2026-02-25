@@ -6,9 +6,10 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonNamingStrategy
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.key.Namespaced
-import java.net.URI
-import java.nio.file.FileSystems
+import java.nio.file.Files
 import java.nio.file.Path
+import java.util.zip.ZipEntry
+import java.util.zip.ZipOutputStream
 import kotlin.io.path.createDirectories
 import kotlin.io.path.createFile
 import kotlin.io.path.exists
@@ -24,11 +25,22 @@ fun Packed.build(path: Path, json: Json = defaultJson) =
     buildWithPathResolver(SimplePathResolver(path), json)
 
 fun Packed.buildZip(zipPath: Path, json: Json = defaultJson) {
-    val uri = URI.create("jar:${zipPath.toUri()}")
-    val env = mapOf("create" to "true")
-
-    FileSystems.newFileSystem(uri, env).use { zipFs ->
-        buildWithPathResolver(SimplePathResolver(zipFs.getPath("/")), json)
+    val tempRoot = Files.createTempDirectory("packed-build-")
+    try {
+        buildWithPathResolver(SimplePathResolver(tempRoot), json)
+        zipPath.parent?.createDirectories()
+        ZipOutputStream(Files.newOutputStream(zipPath)).use { zip ->
+            Files.walk(tempRoot).use { stream ->
+                stream.filter { !Files.isDirectory(it) }.forEach { file ->
+                    val entryName = tempRoot.relativize(file).toString().replace('\\', '/')
+                    zip.putNextEntry(ZipEntry(entryName))
+                    Files.copy(file, zip)
+                    zip.closeEntry()
+                }
+            }
+        }
+    } finally {
+        tempRoot.toFile().deleteRecursively()
     }
 }
 
