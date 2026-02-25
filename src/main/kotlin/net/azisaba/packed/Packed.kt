@@ -7,7 +7,6 @@ import net.azisaba.packed.items.PackItemModel
 import net.azisaba.packed.models.PackModel
 import net.azisaba.packed.sounds.PackSoundEvent
 import net.kyori.adventure.key.Key
-import net.kyori.adventure.key.Keyed
 import org.bukkit.plugin.Plugin
 import java.net.URI
 import java.nio.file.FileSystems
@@ -20,15 +19,12 @@ import kotlin.io.path.writeText
 
 data class Packed(val resourceMap: Map<ResourceType<*>, Set<*>>) {
     @Suppress("UNCHECKED_CAST")
-    fun typeSet(): Set<ResourceType<Any>> = resourceMap.keys as Set<ResourceType<Any>>
-
-    @Suppress("UNCHECKED_CAST")
     fun <R : Any> resourceSet(resourceType: ResourceType<R>): Set<R> =
         resourceMap[resourceType] as? Set<R> ?: emptySet()
 
     companion object BuiltinTypes {
         val EQUIPMENT_MODEL: ResourceType<IdentifiedResource<PackEquipmentModel>> = jsonPerFileType("equipment")
-        val FONT: ResourceType<IdentifiedResource<IdentifiedResource<PackFont>>> = jsonPerFileType("font")
+        val FONT: ResourceType<IdentifiedResource<PackFont>> = jsonPerFileType("font")
         val ITEM_MODEL: ResourceType<IdentifiedResource<PackItemModel>> = jsonPerFileType("items")
         val MODEL: ResourceType<IdentifiedResource<PackModel>> = jsonPerFileType("models")
         val SOUND_EVENT: ResourceType<IdentifiedResource<PackSoundEvent>> = ResourceType(::buildSoundsJson)
@@ -82,9 +78,5 @@ data class Packed(val resourceMap: Map<ResourceType<*>, Set<*>>) {
 
     fun interface ResourceType<R : Any> {
         fun build(json: Json, pathResolver: PackPathResolver, resourceSet: Set<R>)
-    }
-
-    data class IdentifiedResource<T>(val key: Key, val value: T) : Keyed {
-        override fun key(): Key = key
     }
 }
