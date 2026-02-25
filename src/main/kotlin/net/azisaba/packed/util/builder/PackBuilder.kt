@@ -5,6 +5,7 @@ import kotlinx.serialization.json.ClassDiscriminatorMode
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonNamingStrategy
 import net.azisaba.packed.Pack
+import net.azisaba.packed.PackMetadata
 import net.azisaba.packed.PackResourceType
 import net.azisaba.packed.util.PackPathResolver
 import net.azisaba.packed.util.SimplePathResolver
@@ -14,21 +15,23 @@ import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 import kotlin.collections.iterator
 import kotlin.io.path.createDirectories
+import kotlin.io.path.writeText
 
 @OptIn(ExperimentalSerializationApi::class)
 private val defaultJson: Json = Json {
     prettyPrint = true
     namingStrategy = JsonNamingStrategy.SnakeCase
     classDiscriminatorMode = ClassDiscriminatorMode.NONE
+    explicitNulls = false
 }
 
 fun Pack.build(path: Path, json: Json = defaultJson) =
-    buildWithPathResolver(SimplePathResolver(path), json)
+    buildWithPathResolver(SimplePathResolver(path), path, json)
 
 fun Pack.buildZip(zipPath: Path, json: Json = defaultJson) {
     val tempRoot = Files.createTempDirectory("packed-build-")
     try {
-        buildWithPathResolver(SimplePathResolver(tempRoot), json)
+        buildWithPathResolver(SimplePathResolver(tempRoot), tempRoot, json)
         zipPath.parent?.createDirectories()
         ZipOutputStream(Files.newOutputStream(zipPath)).use { zip ->
             Files.walk(tempRoot).use { stream ->
@@ -45,7 +48,10 @@ fun Pack.buildZip(zipPath: Path, json: Json = defaultJson) {
     }
 }
 
-private fun Pack.buildWithPathResolver(pathResolver: PackPathResolver, json: Json) {
+private fun Pack.buildWithPathResolver(pathResolver: PackPathResolver, rootPath: Path, json: Json) {
+    val metadataJson = defaultJson.encodeToString(metadata)
+    rootPath.resolve("pack.mcmeta").writeText(metadataJson)
+
     for ((type, set) in resourceMap) {
         @Suppress("UNCHECKED_CAST")
         (type as PackResourceType<Any>).build(json, pathResolver, set as Set<Any>)

@@ -8,11 +8,10 @@ import net.kyori.adventure.text.Component
 data class PackMetadata(val pack: Info) {
     @Serializable
     data class Info(
-        val packFormat: PackFormat?,
-        val minFormat: PackFormat?,
-        val maxFormat: PackFormat?,
-        val supportedFormats: Set<PackFormatRange> = emptySet(),
+        val minFormat: PackFormat,
+        val maxFormat: PackFormat,
+        val packFormat: Int?,
         @Serializable(with = ComponentSerializer::class)
-        val description: Component? = null,
+        val description: Component,
     )
 }

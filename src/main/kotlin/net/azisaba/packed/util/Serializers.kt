@@ -8,6 +8,7 @@ import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonEncoder
 import kotlinx.serialization.json.JsonObject
+import net.azisaba.packed.PackFormat
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.serializer.json.JSONComponentSerializer
@@ -21,7 +22,7 @@ internal abstract class PackedSerializer<T> : KSerializer<T> {
         throw UnsupportedOperationException("Packed only supports serialization, not deserialization.")
 }
 
-internal abstract class EnumSerializer<T : Enum<T>>(private val kClass: KClass<T>) : PackedSerializer<T>() {
+internal abstract class EnumSerializer<T : Enum<T>>(kClass: KClass<T>) : PackedSerializer<T>() {
     override val descriptor: SerialDescriptor =
         PrimitiveSerialDescriptor(kClass.simpleName ?: "Enum", PrimitiveKind.STRING)
 
@@ -94,6 +95,18 @@ internal object Vector4fcSerializer : PackedSerializer<Vector4fc>() {
         composite.encodeFloatElement(descriptor, 1, value.y())
         composite.encodeFloatElement(descriptor, 2, value.z())
         composite.encodeFloatElement(descriptor, 3, value.w())
+        composite.endStructure(descriptor)
+    }
+}
+
+internal object PackFormatSerializer : PackedSerializer<PackFormat>() {
+    @OptIn(InternalSerializationApi::class)
+    override val descriptor: SerialDescriptor = buildSerialDescriptor("PackFormat", StructureKind.LIST)
+
+    override fun serialize(encoder: Encoder, value: PackFormat) {
+        val composite = encoder.beginCollection(descriptor, 2)
+        composite.encodeIntElement(descriptor, 0, value.major)
+        composite.encodeIntElement(descriptor, 1, value.minor)
         composite.endStructure(descriptor)
     }
 }

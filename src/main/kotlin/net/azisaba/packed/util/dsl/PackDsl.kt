@@ -7,9 +7,6 @@ import net.azisaba.packed.items.PackItemModel
 import net.azisaba.packed.models.PackModel
 import net.azisaba.packed.sounds.PackSoundEvent
 import net.azisaba.packed.util.KeyedPackResource
-import net.azisaba.packed.PackFormat
-import net.azisaba.packed.PackFormatRange
-import net.azisaba.packed.PackMetadata
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.key.Namespaced
 import net.kyori.adventure.text.Component
@@ -69,17 +66,15 @@ class PackBuilder internal constructor() {
 
 @PackDsl
 class MetadataScope internal constructor() {
-    private var packFormat: PackFormat? = null
+    private var packFormat: Int? = null
 
     private var minFormat: PackFormat? = null
     private var maxFormat: PackFormat? = null
 
-    private val supportedFormats: MutableSet<PackFormatRange> = mutableSetOf()
-
     private var description: Component? = null
 
-    fun packFormat(major: Int, minor: Int) {
-        packFormat = PackFormat(major, minor)
+    fun packFormat(major: Int) {
+        packFormat = major
     }
 
     fun minFormat(major: Int, minor: Int = 0) {
@@ -90,22 +85,16 @@ class MetadataScope internal constructor() {
         maxFormat = PackFormat(major, minor)
     }
 
-    fun supportedFormat(minInclusive: Int, maxInclusive: Int) {
-        require(minInclusive <= maxInclusive)
-        supportedFormats += PackFormatRange(minInclusive, maxInclusive)
-    }
-
     fun describe(description: Component) {
         this.description = description
     }
 
     internal fun toMetadata(): PackMetadata = PackMetadata(
         PackMetadata.Info(
+            checkNotNull(minFormat) { "minFormat must be specified" },
+            checkNotNull(maxFormat) { "maxFormat must be specified" },
             packFormat,
-            minFormat,
-            maxFormat,
-            supportedFormats.toSet(),
-            description,
+            checkNotNull(description) { "description must be specified" },
         )
     )
 }
