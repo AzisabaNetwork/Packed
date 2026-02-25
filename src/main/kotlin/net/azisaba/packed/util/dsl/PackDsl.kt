@@ -8,6 +8,7 @@ import net.azisaba.packed.models.PackModel
 import net.azisaba.packed.sounds.PackSoundEvent
 import net.azisaba.packed.util.KeyedPackResource
 import net.kyori.adventure.key.Key
+import net.kyori.adventure.key.KeyPattern
 import net.kyori.adventure.key.Namespaced
 import net.kyori.adventure.text.Component
 import org.bukkit.plugin.Plugin
@@ -137,8 +138,12 @@ class NamespaceScope internal constructor(private val namespace: String) {
 }
 
 @PackDsl
-class ResourceScope<R : Any>(private val scopeNamespace: String) {
+class ResourceScope<R : Any>(private val scopeNamespace: String) : Namespaced {
     private val resources: MutableMap<Key, R> = mutableMapOf()
+
+    fun key(@KeyPattern.Value value: String): Key = Key.key(scopeNamespace, value)
+
+    override fun namespace(): String = scopeNamespace
 
     operator fun String.invoke(value: R) {
         put(Key.key(scopeNamespace, this), value)
