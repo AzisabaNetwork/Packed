@@ -1,12 +1,12 @@
 plugins {
     `java-library`
     `maven-publish`
-    kotlin("jvm") version libs.versions.kotlin.get()
-    kotlin("plugin.serialization") version libs.versions.kotlin.get()
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 group = "net.azisaba"
-version = "0.0.0"
+version = System.getenv("VERSION") ?: "0.0.0"
 
 repositories {
     mavenCentral()
@@ -36,10 +36,12 @@ publishing {
     repositories {
         maven {
             name = "azisaba"
-            url = if (version.toString().endsWith("-SNAPSHOT"))
-                uri("https://repo.azisaba.net/repository/maven-snapshots/")
-            else
-                uri("https://repo.azisaba.net/repository/maven-releases/")
+            url =
+                if (version.toString().endsWith("-SNAPSHOT")) {
+                    uri("https://repo.azisaba.net/repository/maven-snapshots/")
+                } else {
+                    uri("https://repo.azisaba.net/repository/maven-releases/")
+                }
             credentials {
                 username = System.getenv("REPO_USERNAME")
                 password = System.getenv("REPO_PASSWORD")
