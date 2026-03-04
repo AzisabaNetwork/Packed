@@ -4,6 +4,7 @@ import net.azisaba.packed.*
 import net.azisaba.packed.equipment.PackEquipmentModel
 import net.azisaba.packed.font.PackFont
 import net.azisaba.packed.items.PackItemModel
+import net.azisaba.packed.lang.PackLang
 import net.azisaba.packed.models.PackModel
 import net.azisaba.packed.sounds.PackSoundEvent
 import net.azisaba.packed.util.KeyedPackResource
@@ -123,6 +124,8 @@ class NamespaceScope internal constructor(private val namespace: String) {
     fun font(block: ResourceScope<PackFont>.() -> Unit) = register(PackResourceTypes.FONT, block)
 
     fun items(block: ResourceScope<PackItemModel>.() -> Unit) = register(PackResourceTypes.ITEM_MODEL, block)
+
+    fun lang(block: ResourceScope<PackLang>.() -> Unit) = register(PackResourceTypes.LANG, block)
 
     fun models(block: ResourceScope<PackModel>.() -> Unit) = register(PackResourceTypes.MODEL, block)
 

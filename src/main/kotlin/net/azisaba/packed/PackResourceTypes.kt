@@ -6,6 +6,8 @@ import net.azisaba.packed.equipment.EquipmentModelResourceType
 import net.azisaba.packed.equipment.PackEquipmentModel
 import net.azisaba.packed.font.PackFont
 import net.azisaba.packed.items.PackItemModel
+import net.azisaba.packed.lang.PackLang
+import net.azisaba.packed.lang.PackLangResourceType
 import net.azisaba.packed.models.PackModel
 import net.azisaba.packed.sounds.PackSoundEvent
 import net.azisaba.packed.util.KeyedPackResource
@@ -15,19 +17,17 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardCopyOption
 import java.util.jar.JarFile
-import kotlin.collections.component1
-import kotlin.collections.component2
 import kotlin.io.path.createDirectories
 import kotlin.io.path.exists
 import kotlin.io.path.isDirectory
 import kotlin.io.path.writeText
-import kotlin.sequences.forEach
 import kotlin.use
 
 object PackResourceTypes {
     val EQUIPMENT_MODEL: PackResourceType<KeyedPackResource<PackEquipmentModel>> = EquipmentModelResourceType
     val FONT: PackResourceType<KeyedPackResource<PackFont>> = PackFont.resourceType()
     val ITEM_MODEL: PackResourceType<KeyedPackResource<PackItemModel>> = PackItemModel.resourceType()
+    val LANG: PackResourceType<KeyedPackResource<PackLang>> = PackLangResourceType
     val MODEL: PackResourceType<KeyedPackResource<PackModel>> = PackModel.resourceType()
     val SOUND_EVENT: PackResourceType<KeyedPackResource<PackSoundEvent>> = PackSoundEvent.resourceType()
     val PLUGIN_RESOURCE: PackResourceType<Plugin> = PluginResourceType
