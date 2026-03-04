@@ -9,6 +9,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonEncoder
 import kotlinx.serialization.json.JsonObject
 import net.azisaba.packed.PackFormat
+import net.azisaba.packed.lang.Translation
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.serializer.json.JSONComponentSerializer
@@ -108,5 +109,13 @@ internal object PackFormatSerializer : PackedSerializer<PackFormat>() {
         composite.encodeIntElement(descriptor, 0, value.major)
         composite.encodeIntElement(descriptor, 1, value.minor)
         composite.endStructure(descriptor)
+    }
+}
+
+internal object TranslationSerializer : PackedSerializer<Translation>() {
+    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("Translation", PrimitiveKind.STRING)
+
+    override fun serialize(encoder: Encoder, value: Translation) {
+        encoder.encodeString(value.toString())
     }
 }
