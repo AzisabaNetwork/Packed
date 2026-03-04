@@ -10,6 +10,7 @@ import net.kyori.adventure.key.Key
 
 @Serializable
 data class PackModel(
+    @Serializable(with = KeySerializer::class)
     val parent: Key? = null,
     val textures: Map<String, @Serializable(with = KeySerializer::class) Key> = emptyMap(),
     val display: Map<PackDisplayKey, PackDisplay> = emptyMap(),

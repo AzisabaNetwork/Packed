@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "net.azisaba"
-version = System.getenv("VERSION") ?: "0.0.0"
+version = System.getenv("VERSION") ?: "0.0.1"
 
 repositories {
     mavenCentral()
