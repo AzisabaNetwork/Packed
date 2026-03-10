@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "net.azisaba.packed"
-version = System.getenv("VERSION") ?: "0.0.1"
+version = System.getenv("VERSION") ?: "1.0.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
