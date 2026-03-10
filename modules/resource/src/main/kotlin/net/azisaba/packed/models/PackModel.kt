@@ -10,9 +10,9 @@ data class PackModel(
     @Serializable(with = KeySerializer::class)
     val parent: Key? = null,
     val textures: Map<String, @Serializable(with = KeySerializer::class) Key> = emptyMap(),
-    val display: Map<net.azisaba.packed.models.PackDisplayKey, net.azisaba.packed.models.PackDisplay> = emptyMap(),
+    val display: Map<PackDisplayKey, PackDisplay> = emptyMap(),
     val elements: List<PackElement> = emptyList(),
-    val guiLight: net.azisaba.packed.models.PackGuiLight? = null,
+    val guiLight: PackGuiLight? = null,
     val ambientocclusion: Boolean? = null,
 )
 

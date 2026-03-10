@@ -6,7 +6,7 @@ import net.kyori.adventure.key.Key
 
 @Serializable
 data class PackSoundEvent(
-    val sounds: Collection<net.azisaba.packed.sounds.PackSound>,
+    val sounds: Collection<PackSound>,
     @Serializable(with = KeySerializer::class)
     val subtitle: Key? = null,
     val replace: Boolean = false,

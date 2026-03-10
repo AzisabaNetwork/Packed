@@ -17,7 +17,7 @@ sealed interface PackTintSource {
 data class PackConstantTintSource(
     @Serializable(with = RGBLikeSerializer::class)
     val value: RGBLike,
-) : net.azisaba.packed.items.properties.PackTintSource {
+) : PackTintSource {
     @EncodeDefault
     override val type: Key = Key.key("constant")
 }
@@ -26,7 +26,7 @@ data class PackConstantTintSource(
 data class PackDyeTintSource(
     @Serializable(with = RGBLikeSerializer::class)
     val default: RGBLike,
-) : net.azisaba.packed.items.properties.PackTintSource {
+) : PackTintSource {
     @EncodeDefault
     override val type: Key = Key.key("dye")
 }
@@ -35,7 +35,7 @@ data class PackDyeTintSource(
 data class PackFireworkTintSource(
     @Serializable(with = RGBLikeSerializer::class)
     val default: RGBLike,
-) : net.azisaba.packed.items.properties.PackTintSource {
+) : PackTintSource {
     @EncodeDefault
     override val type: Key = Key.key("firework")
 }
@@ -44,7 +44,7 @@ data class PackFireworkTintSource(
 data class PackGrassTintSource(
     val temperature: Float,
     val downfall: Float,
-) : net.azisaba.packed.items.properties.PackTintSource {
+) : PackTintSource {
     @EncodeDefault
     override val type: Key = Key.key("grass")
 }
@@ -53,7 +53,7 @@ data class PackGrassTintSource(
 data class PackMapColor(
     @Serializable(with = RGBLikeSerializer::class)
     val default: RGBLike,
-) : net.azisaba.packed.items.properties.PackTintSource {
+) : PackTintSource {
     @EncodeDefault
     override val type: Key = Key.key("map_color")
 }
@@ -62,7 +62,7 @@ data class PackMapColor(
 data class PackPotionTintSource(
     @Serializable(with = RGBLikeSerializer::class)
     val default: RGBLike,
-) : net.azisaba.packed.items.properties.PackTintSource {
+) : PackTintSource {
     @EncodeDefault
     override val type: Key = Key.key("potion")
 }
@@ -71,7 +71,7 @@ data class PackPotionTintSource(
 data class PackTeamTintSource(
     @Serializable(with = RGBLikeSerializer::class)
     val default: RGBLike,
-) : net.azisaba.packed.items.properties.PackTintSource {
+) : PackTintSource {
     @EncodeDefault
     override val type: Key = Key.key("team")
 }
@@ -80,7 +80,7 @@ data class PackTeamTintSource(
 data class PackCustomModelDataTintSource(
     val default: Int,
     val index: Int? = null,
-) : net.azisaba.packed.items.properties.PackTintSource {
+) : PackTintSource {
     @EncodeDefault
     override val type: Key = Key.key("custom_model_data")
 }

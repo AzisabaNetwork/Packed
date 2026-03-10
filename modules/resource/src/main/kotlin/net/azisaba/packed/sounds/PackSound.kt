@@ -7,7 +7,7 @@ import net.kyori.adventure.key.Key
 
 @Serializable
 data class PackSound(
-    val type: net.azisaba.packed.sounds.PackSoundType,
+    val type: PackSoundType,
     @Serializable(with = KeySerializer::class)
     val name: Key,
     val volume: Float = 1f,

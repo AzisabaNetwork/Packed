@@ -14,7 +14,7 @@ sealed interface PackSpecialModel {
 }
 
 @Serializable
-data class PackBannerSpecialModel(val color: PackDyeColor) : net.azisaba.packed.items.properties.PackSpecialModel {
+data class PackBannerSpecialModel(val color: PackDyeColor) : PackSpecialModel {
     @EncodeDefault
     override val type: String = "banner"
 }
@@ -23,7 +23,7 @@ data class PackBannerSpecialModel(val color: PackDyeColor) : net.azisaba.packed.
 data class PackBedSpecialModel(
     @Serializable(with = KeySerializer::class)
     val texture: Key,
-) : net.azisaba.packed.items.properties.PackSpecialModel {
+) : PackSpecialModel {
     @EncodeDefault
     override val type: String = "bed"
 }
@@ -33,19 +33,19 @@ data class PackChestSpecialModel(
     @Serializable(with = KeySerializer::class)
     val texture: Key,
     val openness: Float,
-) : net.azisaba.packed.items.properties.PackSpecialModel {
+) : PackSpecialModel {
     @EncodeDefault
     override val type: String = "chest"
 }
 
 @Serializable
-class PackConduitSpecialModel : net.azisaba.packed.items.properties.PackSpecialModel {
+class PackConduitSpecialModel : PackSpecialModel {
     @EncodeDefault
     override val type: String = "conduit"
 }
 
 @Serializable
-class PackDecoratedPotSpecialModel : net.azisaba.packed.items.properties.PackSpecialModel {
+class PackDecoratedPotSpecialModel : PackSpecialModel {
     @EncodeDefault
     override val type: String = "decorated_pot"
 }
@@ -56,7 +56,7 @@ data class PackHeadSpecialModel(
     @Serializable(with = KeySerializer::class)
     val texture: Key? = null,
     val animation: Float? = null,
-) : net.azisaba.packed.items.properties.PackSpecialModel {
+) : PackSpecialModel {
     @EncodeDefault
     override val type: String = "head"
 
@@ -83,13 +83,13 @@ data class PackHeadSpecialModel(
 }
 
 @Serializable
-class PackPlayerHeadSpecialModel : net.azisaba.packed.items.properties.PackSpecialModel {
+class PackPlayerHeadSpecialModel : PackSpecialModel {
     @EncodeDefault
     override val type: String = "player_head"
 }
 
 @Serializable
-class PackShieldSpecialModel : net.azisaba.packed.items.properties.PackSpecialModel {
+class PackShieldSpecialModel : PackSpecialModel {
     @EncodeDefault
     override val type: String = "shield"
 }
@@ -100,7 +100,7 @@ data class PackShulkerBoxSpecialModel(
     val texture: Key,
     val openness: Float? = null,
     val orientation: PackDirection? = null,
-) : net.azisaba.packed.items.properties.PackSpecialModel {
+) : PackSpecialModel {
     @EncodeDefault
     override val type: String = "shulker_box"
 }
@@ -109,7 +109,7 @@ data class PackShulkerBoxSpecialModel(
 data class PackStandingSignSpecialModel(
     val woodType: WoodType,
     val texture: Key? = null,
-) : net.azisaba.packed.items.properties.PackSpecialModel {
+) : PackSpecialModel {
     @EncodeDefault
     override val type: String = "standing_sign"
 
@@ -157,7 +157,7 @@ data class PackStandingSignSpecialModel(
 data class PackHangingSignSpecialModel(
     val woodType: WoodType,
     val texture: Key? = null,
-) : net.azisaba.packed.items.properties.PackSpecialModel {
+) : PackSpecialModel {
     @EncodeDefault
     override val type: String = "hanging_sign"
 
@@ -202,7 +202,7 @@ data class PackHangingSignSpecialModel(
 }
 
 @Serializable
-class PackTridentSpecialModel : net.azisaba.packed.items.properties.PackSpecialModel {
+class PackTridentSpecialModel : PackSpecialModel {
     @EncodeDefault
     override val type: String = "trident"
 }

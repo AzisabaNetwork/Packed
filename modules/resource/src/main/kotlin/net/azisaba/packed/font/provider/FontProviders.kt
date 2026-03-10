@@ -15,7 +15,7 @@ import net.kyori.adventure.key.Key
 sealed interface PackFontProvider {
     val type: String
 
-    val filter: net.azisaba.packed.font.provider.PackFontFilter?
+    val filter: PackFontFilter?
 }
 
 @Serializable
@@ -25,8 +25,8 @@ data class PackBitmapFontProvider(
     val chars: List<String>,
     val ascent: Int,
     val height: Int,
-    override val filter: net.azisaba.packed.font.provider.PackFontFilter? = null,
-) : net.azisaba.packed.font.provider.PackFontProvider {
+    override val filter: PackFontFilter? = null,
+) : PackFontProvider {
     @EncodeDefault
     override val type: String = "bitmap"
 }
@@ -35,8 +35,8 @@ data class PackBitmapFontProvider(
 data class PackReferenceFontProvider(
     @Serializable(with = KeySerializer::class)
     val id: Key,
-    override val filter: net.azisaba.packed.font.provider.PackFontFilter? = null,
-) : net.azisaba.packed.font.provider.PackFontProvider {
+    override val filter: PackFontFilter? = null,
+) : PackFontProvider {
     @EncodeDefault
     override val type: String = "reference"
 }
@@ -44,8 +44,8 @@ data class PackReferenceFontProvider(
 @Serializable
 data class PackSpaceFontProvider(
     val advances: Map<Char, Int>,
-    override val filter: net.azisaba.packed.font.provider.PackFontFilter? = null,
-) : net.azisaba.packed.font.provider.PackFontProvider {
+    override val filter: PackFontFilter? = null,
+) : PackFontProvider {
     @EncodeDefault
     override val type: String = "space"
 }
@@ -58,8 +58,8 @@ data class PackTtfFontProvider(
     val oversample: Int,
     val shift: Shift = Shift(0, 0),
     val skip: List<Char> = emptyList(),
-    override val filter: net.azisaba.packed.font.provider.PackFontFilter? = null,
-) : net.azisaba.packed.font.provider.PackFontProvider {
+    override val filter: PackFontFilter? = null,
+) : PackFontProvider {
     @EncodeDefault
     override val type: String = "ttf"
 
@@ -84,8 +84,8 @@ data class PackUnihexFontProvider(
     @Serializable(with = KeySerializer::class)
     val hexFile: Key,
     val sizeOverrides: List<SizeOverride> = emptyList(),
-    override val filter: net.azisaba.packed.font.provider.PackFontFilter? = null,
-) : net.azisaba.packed.font.provider.PackFontProvider {
+    override val filter: PackFontFilter? = null,
+) : PackFontProvider {
     @EncodeDefault
     override val type: String = "unihex"
 
