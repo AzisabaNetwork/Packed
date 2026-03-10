@@ -5,7 +5,14 @@ import kotlinx.serialization.json.ClassDiscriminatorMode
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonNamingStrategy
 import net.azisaba.packed.dsl.PackedBuilder
+import java.io.File
+import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.StandardOpenOption
+import java.util.zip.ZipEntry
+import java.util.zip.ZipOutputStream
+import kotlin.io.path.deleteIfExists
+import kotlin.io.path.isDirectory
 import kotlin.io.path.writeText
 
 @OptIn(ExperimentalSerializationApi::class)
@@ -30,6 +37,41 @@ class Packed(
         }
         for (source in otherSources) {
             source.export(context)
+        }
+    }
+
+    fun exportZip(zipPath: Path, json: Json = defaultJson) {
+        val tempDir = Files.createTempDirectory("packed-")
+
+        try {
+            export(tempDir, json)
+
+            ZipOutputStream(
+                Files.newOutputStream(
+                    zipPath,
+                    StandardOpenOption.CREATE,
+                    StandardOpenOption.TRUNCATE_EXISTING
+                )
+            ).use { zip ->
+                Files.walk(tempDir).use { paths ->
+                    paths.forEach { path ->
+                        val entryName = tempDir.relativize(path)
+                            .toString()
+                            .replace(File.separatorChar, '/')
+
+                        if (!path.isDirectory()) {
+                            zip.putNextEntry(ZipEntry(entryName))
+                            Files.copy(path, zip)
+                            zip.closeEntry()
+                        }
+                    }
+                }
+            }
+        } finally {
+            Files.walk(tempDir).use { stream ->
+                stream.sorted(Comparator.reverseOrder())
+                    .forEach(Path::deleteIfExists)
+            }
         }
     }
 

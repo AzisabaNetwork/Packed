@@ -4,4 +4,5 @@ plugins {
 rootProject.name = "packed"
 
 include("modules:core")
+include("modules:ktor-paper")
 include("modules:resource-pack")
