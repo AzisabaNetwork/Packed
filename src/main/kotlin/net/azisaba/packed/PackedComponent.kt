@@ -17,6 +17,8 @@ import kotlin.io.path.writeText
 
 typealias PackedEntries<T> = Map<PackedKey<T>, T>
 
+typealias MutablePackedEntries<T> = MutableMap<PackedKey<T>, T>
+
 abstract class PackedComponent<T : Any>(val entries: PackedEntries<T>) : PackedExportable {
     companion object {
         fun equipmentModel(entries: PackedEntries<PackEquipmentModel>): PackedComponent<PackEquipmentModel> =

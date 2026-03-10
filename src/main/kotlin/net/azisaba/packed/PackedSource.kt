@@ -11,7 +11,7 @@ import kotlin.reflect.KClass
 
 fun interface PackedSource : PackedExportable {
     companion object Builtins {
-        fun directory(path: Path, sourceSubPath: Path = Path.of(""), targetSubPath: Path = Path.of("")): PackedSource =
+        fun directory(path: Path, sourceSubPath: Path, targetSubPath: Path): PackedSource =
             PackedSource { context ->
                 if (!path.isDirectory()) return@PackedSource
                 val sourceRoot = path.resolve(sourceSubPath)
@@ -19,7 +19,7 @@ fun interface PackedSource : PackedExportable {
                 copyTree(sourceRoot, targetRoot)
             }
 
-        fun zip(path: Path, sourceSubPath: Path = Path.of(""), targetSubPath: Path = Path.of("")): PackedSource =
+        fun zip(path: Path, sourceSubPath: Path, targetSubPath: Path): PackedSource =
             PackedSource { context ->
                 if (!path.isRegularFile()) return@PackedSource
                 FileSystems.newFileSystem(path).use { fs ->
@@ -29,27 +29,24 @@ fun interface PackedSource : PackedExportable {
                 }
             }
 
-        fun javaResources(
-            kClass: KClass<*>,
-            sourceSubPath: Path = Path.of("assets"),
-            targetSubPath: Path = Path.of("assets")
-        ): PackedSource = PackedSource { context ->
-            val sourcePath = Path.of(kClass.java.protectionDomain.codeSource.location.toURI())
+        fun javaResources(kClass: KClass<*>, sourceSubPath: Path, targetSubPath: Path): PackedSource =
+            PackedSource { context ->
+                val sourcePath = Path.of(kClass.java.protectionDomain.codeSource.location.toURI())
 
-            fun copy(root: Path) {
-                val sourceRoot = root.resolve(sourceSubPath)
-                val targetRoot = context.pathResolver.rootPath.resolve(targetSubPath)
-                copyTree(sourceRoot, targetRoot)
-            }
+                fun copy(root: Path) {
+                    val sourceRoot = root.resolve(sourceSubPath)
+                    val targetRoot = context.pathResolver.rootPath.resolve(targetSubPath)
+                    copyTree(sourceRoot, targetRoot)
+                }
 
-            if (sourcePath.isDirectory()) {
-                copy(sourcePath)
-            } else {
-                FileSystems.newFileSystem(sourcePath).use { fs ->
-                    copy(fs.getPath("/"))
+                if (sourcePath.isDirectory()) {
+                    copy(sourcePath)
+                } else {
+                    FileSystems.newFileSystem(sourcePath).use { fs ->
+                        copy(fs.getPath("/"))
+                    }
                 }
             }
-        }
 
         private fun copyTree(sourceRoot: Path, targetRoot: Path) {
             if (!sourceRoot.isDirectory()) return

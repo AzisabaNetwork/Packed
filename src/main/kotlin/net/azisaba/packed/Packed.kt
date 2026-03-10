@@ -4,6 +4,7 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.ClassDiscriminatorMode
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonNamingStrategy
+import net.azisaba.packed.dsl.PackedBuilder
 import java.nio.file.Path
 import kotlin.io.path.writeText
 
@@ -37,4 +38,10 @@ class Packed(
         val path = context.pathResolver.rootPath.resolve("pack.mcmeta")
         path.writeText(jsonString)
     }
+}
+
+fun Packed(builderAction: PackedBuilder.() -> Unit): Packed {
+    val builder = PackedBuilder()
+    builder.builderAction()
+    return builder.build()
 }
