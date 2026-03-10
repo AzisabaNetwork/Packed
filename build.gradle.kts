@@ -10,21 +10,36 @@ version = System.getenv("VERSION") ?: "0.0.1"
 
 repositories {
     mavenCentral()
-    maven("https://repo.papermc.io/repository/maven-public/") { name = "papermc" }
-}
-
-dependencies {
-    api(libs.ktor.server.core)
-    api(libs.ktor.server.netty)
-    compileOnly(libs.adventure.api)
-    compileOnly(libs.adventure.text.serializer.gson)
-    compileOnly(libs.joml)
-    implementation(libs.kotlinx.serialization.json)
-    testImplementation(kotlin("test"))
 }
 
 kotlin { jvmToolchain(8) }
 java { toolchain.languageVersion.set(JavaLanguageVersion.of(21)) }
+
+val adventure = libs.adventure
+val joml = libs.joml
+val kotlinx = libs.kotlinx
+
+subprojects {
+    group = rootProject.group
+    version = rootProject.version
+
+    apply(plugin = "java-library")
+    apply(plugin = "maven-publish")
+    apply(plugin = "org.jetbrains.kotlin.jvm")
+    apply(plugin = "org.jetbrains.kotlin.plugin.serialization")
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        compileOnly(adventure.api)
+        compileOnly(adventure.text.serializer.gson)
+        compileOnly(joml)
+        implementation(kotlinx.serialization.json)
+        testImplementation(kotlin("test"))
+    }
+}
 
 publishing {
     publications {
