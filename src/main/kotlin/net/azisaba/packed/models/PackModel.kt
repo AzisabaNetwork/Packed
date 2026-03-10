@@ -1,11 +1,8 @@
 package net.azisaba.packed.models
 
-import net.azisaba.packed.util.KeySerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import net.azisaba.packed.KeyedJsonPerFileResourceType
-import net.azisaba.packed.util.KeyedPackResource
-import net.azisaba.packed.PackResourceType
+import net.azisaba.packed.KeySerializer
 import net.kyori.adventure.key.Key
 
 @Serializable
@@ -17,13 +14,7 @@ data class PackModel(
     val elements: List<PackElement> = emptyList(),
     val guiLight: PackGuiLight? = null,
     val ambientocclusion: Boolean? = null,
-) {
-    internal companion object {
-        fun resourceType(): PackResourceType<KeyedPackResource<PackModel>> = KeyedJsonPerFileResourceType(
-            "models", serializer()
-        )
-    }
-}
+)
 
 @Serializable
 enum class PackGuiLight {

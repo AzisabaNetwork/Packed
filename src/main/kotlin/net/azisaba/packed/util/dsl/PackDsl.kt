@@ -4,7 +4,7 @@ import net.azisaba.packed.*
 import net.azisaba.packed.equipment.PackEquipmentModel
 import net.azisaba.packed.font.PackFont
 import net.azisaba.packed.items.PackItemModel
-import net.azisaba.packed.lang.PackLang
+import net.azisaba.packed.lang.PackLanguage
 import net.azisaba.packed.models.PackModel
 import net.azisaba.packed.sounds.PackSoundEvent
 import net.azisaba.packed.util.KeyedPackResource
@@ -14,7 +14,7 @@ import net.kyori.adventure.key.Namespaced
 import net.kyori.adventure.text.Component
 import org.bukkit.plugin.Plugin
 
-fun packed(block: PackBuilder.() -> Unit): Pack = PackBuilder().apply(block).build()
+fun packed(block: PackBuilder.() -> Unit): Packed = PackBuilder().apply(block).build()
 
 @DslMarker
 annotation class PackDsl
@@ -40,7 +40,7 @@ class PackBuilder internal constructor() {
         namespaceScopes += NamespaceScope(namespace).apply(block)
     }
 
-    fun build(): Pack {
+    fun build(): Packed {
         val merged = mutableMapOf<PackResourceType<*>, MutableSet<*>>()
 
         for (namespaceScope in namespaceScopes) {
@@ -59,7 +59,7 @@ class PackBuilder internal constructor() {
             bucket.addAll(pluginsScope.toPluginSet())
         }
 
-        return Pack(
+        return Packed(
             metadataScope.toMetadata(),
             merged.mapValues { it.value.toSet() }
         )
@@ -91,8 +91,8 @@ class MetadataScope internal constructor() {
         this.description = description
     }
 
-    internal fun toMetadata(): PackMetadata = PackMetadata(
-        PackMetadata.Info(
+    internal fun toMetadata(): PackMeta = PackMeta(
+        PackMeta.Info(
             checkNotNull(minFormat) { "minFormat must be specified" },
             checkNotNull(maxFormat) { "maxFormat must be specified" },
             packFormat,
@@ -125,7 +125,7 @@ class NamespaceScope internal constructor(private val namespace: String) {
 
     fun items(block: ResourceScope<PackItemModel>.() -> Unit) = register(PackResourceTypes.ITEM_MODEL, block)
 
-    fun lang(block: ResourceScope<PackLang>.() -> Unit) = register(PackResourceTypes.LANG, block)
+    fun lang(block: ResourceScope<PackLanguage>.() -> Unit) = register(PackResourceTypes.LANG, block)
 
     fun models(block: ResourceScope<PackModel>.() -> Unit) = register(PackResourceTypes.MODEL, block)
 

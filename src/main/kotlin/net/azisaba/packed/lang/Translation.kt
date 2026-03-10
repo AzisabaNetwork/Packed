@@ -1,5 +1,9 @@
 package net.azisaba.packed.lang
 
+import kotlinx.serialization.Serializable
+import net.azisaba.packed.TranslationSerializer
+
+@Serializable(with = TranslationSerializer::class)
 sealed interface Translation {
     fun append(translation: Translation): Translation = CompositeTranslation(listOf(this, translation))
 

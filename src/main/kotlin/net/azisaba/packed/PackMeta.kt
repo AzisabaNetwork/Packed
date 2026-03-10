@@ -1,11 +1,10 @@
 package net.azisaba.packed
 
 import kotlinx.serialization.Serializable
-import net.azisaba.packed.util.ComponentSerializer
 import net.kyori.adventure.text.Component
 
 @Serializable
-data class PackMetadata(val pack: Info) {
+data class PackMeta(val pack: Info) {
     @Serializable
     data class Info(
         val minFormat: PackFormat,
@@ -15,3 +14,6 @@ data class PackMetadata(val pack: Info) {
         val description: Component,
     )
 }
+
+@Serializable(with = PackFormatSerializer::class)
+data class PackFormat(val major: Int, val minor: Int = 0)

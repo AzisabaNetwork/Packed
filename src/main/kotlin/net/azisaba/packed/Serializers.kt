@@ -1,4 +1,4 @@
-package net.azisaba.packed.util
+package net.azisaba.packed
 
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.KSerializer
@@ -8,7 +8,6 @@ import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonEncoder
 import kotlinx.serialization.json.JsonObject
-import net.azisaba.packed.PackFormat
 import net.azisaba.packed.lang.Translation
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.text.Component

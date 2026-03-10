@@ -1,7 +1,7 @@
 package net.azisaba.packed.items.properties
 
-import net.azisaba.packed.util.EnumSerializer
-import net.azisaba.packed.util.KeySerializer
+import net.azisaba.packed.EnumSerializer
+import net.azisaba.packed.KeySerializer
 import net.azisaba.packed.PackDirection
 import kotlinx.serialization.EncodeDefault
 import kotlinx.serialization.SerialName

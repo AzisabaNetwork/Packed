@@ -5,7 +5,7 @@ import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import net.azisaba.packed.Pack
+import net.azisaba.packed.Packed
 import net.azisaba.packed.util.builder.buildZip
 import org.bukkit.plugin.Plugin
 import java.nio.file.Files
@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.io.path.createDirectories
 import kotlin.io.path.deleteIfExists
 
-fun Pack.launchKtor(
+fun Packed.launchKtor(
     plugin: Plugin,
     port: Int = 8080,
     host: String = "0.0.0.0",
