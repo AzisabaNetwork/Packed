@@ -6,6 +6,16 @@ on:
       version:
         description: 'Plugin version. ex: x.x.x, x.x.x-SNAPSHOT'
         required: true
+      module:
+        description: 'Module to publish'
+        required: true
+        default: all
+        type: choice
+        options:
+          - all
+          - core
+          - resource-pack
+          - ktor-paper
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -34,10 +44,18 @@ jobs:
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
-          path: build/libs/
+          path: modules/**/build/libs/*.jar
 
       - name: Publish to azisaba repo
-        run: ./gradlew publish
+        run: |
+          if [ "${{ github.event.inputs.module }}" = "all" ]; then
+            ./gradlew \
+              :modules:core:publish \
+              :modules:resource-pack:publish \
+              :modules:ktor-paper:publish
+          else
+            ./gradlew :modules:${{ github.event.inputs.module }}:publish
+          fi
         env:
           VERSION: ${{ github.event.inputs.version }}
           REPO_USERNAME: ${{ secrets.REPO_USERNAME }}
@@ -47,5 +65,5 @@ jobs:
         uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b # v2.5.0
         with:
           tag_name: ${{ github.event.inputs.version }}
-          files: build/libs/*.jar
+          files: modules/**/build/libs/*.jar
           generate_release_notes: true

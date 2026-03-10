@@ -1,11 +1,13 @@
+import org.gradle.api.publish.PublishingExtension
+import org.gradle.api.publish.maven.MavenPublication
+
 plugins {
     `java-library`
-    `maven-publish`
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.kotlin.serialization)
 }
 
-group = "net.azisaba"
+group = "net.azisaba.packed"
 version = System.getenv("VERSION") ?: "0.0.1"
 
 repositories {
@@ -39,29 +41,29 @@ subprojects {
         implementation(kotlinx.serialization.json)
         testImplementation(kotlin("test"))
     }
-}
 
-publishing {
-    publications {
-        create<MavenPublication>("mavenJava") {
-            from(components["java"])
-            groupId = group.toString()
-            artifactId = project.name
-            version = version.toString()
+    configure<PublishingExtension> {
+        publications {
+            create<MavenPublication>("mavenJava") {
+                from(components["java"])
+                groupId = group.toString()
+                artifactId = project.name
+                version = version.toString()
+            }
         }
-    }
-    repositories {
-        maven {
-            name = "azisaba"
-            url =
-                if (version.toString().endsWith("-SNAPSHOT")) {
-                    uri("https://repo.azisaba.net/repository/maven-snapshots/")
-                } else {
-                    uri("https://repo.azisaba.net/repository/maven-releases/")
+        repositories {
+            maven {
+                name = "azisaba"
+                url =
+                    if (version.toString().endsWith("-SNAPSHOT")) {
+                        uri("https://repo.azisaba.net/repository/maven-snapshots/")
+                    } else {
+                        uri("https://repo.azisaba.net/repository/maven-releases/")
+                    }
+                credentials {
+                    username = System.getenv("REPO_USERNAME")
+                    password = System.getenv("REPO_PASSWORD")
                 }
-            credentials {
-                username = System.getenv("REPO_USERNAME")
-                password = System.getenv("REPO_PASSWORD")
             }
         }
     }
