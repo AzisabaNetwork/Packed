@@ -11,7 +11,7 @@ import kotlin.reflect.KClass
 
 fun interface PackedSource : PackedExportable {
     companion object Builtins {
-        fun directory(path: Path, sourceSubPath: Path, targetSubPath: Path): PackedSource =
+        fun directory(path: Path, sourceSubPath: String, targetSubPath: String): PackedSource =
             PackedSource { context ->
                 if (!path.isDirectory()) return@PackedSource
                 val sourceRoot = path.resolve(sourceSubPath)
@@ -19,7 +19,7 @@ fun interface PackedSource : PackedExportable {
                 copyTree(sourceRoot, targetRoot)
             }
 
-        fun zip(path: Path, sourceSubPath: Path, targetSubPath: Path): PackedSource =
+        fun zip(path: Path, sourceSubPath: String, targetSubPath: String): PackedSource =
             PackedSource { context ->
                 if (!path.isRegularFile()) return@PackedSource
                 FileSystems.newFileSystem(path).use { fs ->
@@ -29,7 +29,7 @@ fun interface PackedSource : PackedExportable {
                 }
             }
 
-        fun javaResources(kClass: KClass<*>, sourceSubPath: Path, targetSubPath: Path): PackedSource =
+        fun javaResources(kClass: KClass<*>, sourceSubPath: String, targetSubPath: String): PackedSource =
             PackedSource { context ->
                 val sourcePath = Path.of(kClass.java.protectionDomain.codeSource.location.toURI())
 
@@ -55,7 +55,7 @@ fun interface PackedSource : PackedExportable {
                 stream.forEach { resourcePath ->
                     if (resourcePath == sourceRoot) return@forEach
 
-                    val outputPath = targetRoot.resolve(sourceRoot.relativize(resourcePath))
+                    val outputPath = targetRoot.resolve(sourceRoot.relativize(resourcePath).toString())
 
                     if (resourcePath.isDirectory()) {
                         outputPath.createDirectories()

@@ -22,13 +22,13 @@ class PackedBuilder internal constructor() {
         components.add(scope.build())
     }
 
-    fun includeDirectory(path: Path, sourceSubPath: Path = Path.of(""), targetSubPath: Path = Path.of("")) =
+    fun includeDirectory(path: Path, sourceSubPath: String = "", targetSubPath: String = "") =
         otherSource(PackedSource.directory(path, sourceSubPath, targetSubPath))
 
-    fun includeZip(path: Path, sourceSubPath: Path = Path.of(""), targetSubpath: Path = Path.of("")) =
+    fun includeZip(path: Path, sourceSubPath: String = "", targetSubpath: String = "") =
         otherSource(PackedSource.zip(path, sourceSubPath, targetSubpath))
 
-    fun <T : Any> includeJavaResources(kClass: KClass<T>, sourceSubPath: Path = Path.of("assets"), targetSubPath: Path = Path.of("assets")) =
+    fun <T : Any> includeJavaResources(kClass: KClass<T>, sourceSubPath: String = "assets", targetSubPath: String = "assets") =
         otherSource(PackedSource.javaResources(kClass, sourceSubPath, targetSubPath))
 
     fun otherSource(otherSource: PackedSource) {
