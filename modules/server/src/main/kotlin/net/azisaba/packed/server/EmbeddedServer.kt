@@ -32,7 +32,7 @@ fun Packed.configureEmbeddedServer(
     port: Int = 8080,
     host: String = "0.0.0.0",
     watchPaths: List<String> = listOf(SystemFileSystem.resolve(Path(".")).toString()),
-    configureAction: Application.() -> Unit,
+    configureAction: Application.() -> Unit = {},
 ): ConfiguredEmbeddedServer<NettyApplicationEngine, NettyApplicationEngine.Configuration> {
     val tempDirectoryPath = Files.createTempDirectory("packed-server-")
     val zipPath = tempDirectoryPath.resolve("pack.zip")

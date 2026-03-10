@@ -55,7 +55,7 @@ subprojects {
             maven {
                 name = "azisaba"
                 url =
-                    if (version.toString().endsWith("-SNAPSHOT")) {
+                    if (version.toString().contains("SNAPSHOT")) {
                         uri("https://repo.azisaba.net/repository/maven-snapshots/")
                     } else {
                         uri("https://repo.azisaba.net/repository/maven-releases/")
