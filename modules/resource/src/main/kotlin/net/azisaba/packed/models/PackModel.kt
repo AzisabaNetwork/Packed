@@ -18,15 +18,17 @@ data class PackModel(
     val guiLight: PackGuiLight? = null,
     val ambientocclusion: Boolean? = null,
 ) {
-    val BLOCK_BLOCK: PackedKey<PackModel> = PackedKey.model(Key.key("block/block"))
-    val BUILTIN_GENERATED: PackedKey<PackModel> = PackedKey.model(Key.key("builtin/generated"))
-    val BUILTIN_MISSING: PackedKey<PackModel> = PackedKey.model(Key.key("builtin/missing"))
-    val ITEM_GENERATED: PackedKey<PackModel> = PackedKey.model(Key.key("item/generated"))
+    companion object {
+        val BLOCK_BLOCK: PackedKey<PackModel> = PackedKey.model(Key.key("block/block"))
+        val BUILTIN_GENERATED: PackedKey<PackModel> = PackedKey.model(Key.key("builtin/generated"))
+        val BUILTIN_MISSING: PackedKey<PackModel> = PackedKey.model(Key.key("builtin/missing"))
+        val ITEM_GENERATED: PackedKey<PackModel> = PackedKey.model(Key.key("item/generated"))
 
-    fun item(vararg layers: Key): PackModel = PackModel(
-        parent = ITEM_GENERATED,
-        textures = layers.mapIndexed { index, value -> "layer$index" to value }.toMap(),
-    )
+        fun item(vararg layers: Key): PackModel = PackModel(
+            parent = ITEM_GENERATED,
+            textures = layers.mapIndexed { index, value -> "layer$index" to value }.toMap(),
+        )
+    }
 }
 
 @Serializable
