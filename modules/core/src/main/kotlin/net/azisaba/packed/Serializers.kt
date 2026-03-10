@@ -32,6 +32,15 @@ object KeySerializer : PackedSerializer<Key>() {
 }
 
 @ApiStatus.Internal
+object PackedKeySerializer : PackedSerializer<PackedKey<*>>() {
+    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("PackedKey", PrimitiveKind.STRING)
+
+    override fun serialize(encoder: Encoder, value: PackedKey<*>) {
+        encoder.encodeString("${value.namespace()}:${value.value()}")
+    }
+}
+
+@ApiStatus.Internal
 object ComponentSerializer : PackedSerializer<Component>() {
     override val descriptor: SerialDescriptor = buildClassSerialDescriptor("Component") {
         element<JsonObject>("json")
