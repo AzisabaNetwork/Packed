@@ -54,8 +54,8 @@ jobs:
           if [ "${{ github.event.inputs.module }}" = "all" ]; then
             ./gradlew \
               :modules:core:publish \
-              :modules:resource-pack:publish \
-              :modules:ktor-paper:publish
+              :modules:resource:publish \
+              :modules:server:publish
           else
             ./gradlew :modules:${{ github.event.inputs.module }}:publish
           fi
