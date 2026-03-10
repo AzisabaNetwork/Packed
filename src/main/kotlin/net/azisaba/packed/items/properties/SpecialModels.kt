@@ -1,13 +1,12 @@
 package net.azisaba.packed.items.properties
 
-import net.azisaba.packed.EnumSerializer
-import net.azisaba.packed.KeySerializer
-import net.azisaba.packed.PackDirection
 import kotlinx.serialization.EncodeDefault
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import net.azisaba.packed.KeySerializer
+import net.azisaba.packed.PackDirection
+import net.azisaba.packed.PackDyeColor
 import net.kyori.adventure.key.Key
-import org.bukkit.DyeColor
 
 @Serializable
 sealed interface PackSpecialModel {
@@ -15,10 +14,7 @@ sealed interface PackSpecialModel {
 }
 
 @Serializable
-data class PackBannerSpecialModel(
-    @Serializable(with = DyeColorSerializer::class)
-    val color: DyeColor,
-) : PackSpecialModel {
+data class PackBannerSpecialModel(val color: PackDyeColor) : PackSpecialModel {
     @EncodeDefault
     override val type: String = "banner"
 }
@@ -210,5 +206,3 @@ class PackTridentSpecialModel : PackSpecialModel {
     @EncodeDefault
     override val type: String = "trident"
 }
-
-private object DyeColorSerializer : EnumSerializer<DyeColor>(DyeColor::class)

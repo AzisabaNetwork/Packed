@@ -13,25 +13,14 @@ import net.kyori.adventure.key.Key
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.serializer.json.JSONComponentSerializer
 import net.kyori.adventure.util.RGBLike
+import org.jetbrains.annotations.ApiStatus
 import org.joml.Vector3ic
 import org.joml.Vector4fc
-import kotlin.reflect.KClass
 
-internal abstract class PackedSerializer<T> : KSerializer<T> {
+@ApiStatus.Internal
+abstract class PackedSerializer<T> : KSerializer<T> {
     override fun deserialize(decoder: Decoder): T =
         throw UnsupportedOperationException("Packed only supports serialization, not deserialization.")
-}
-
-internal abstract class EnumSerializer<T : Enum<T>>(kClass: KClass<T>) : PackedSerializer<T>() {
-    override val descriptor: SerialDescriptor =
-        PrimitiveSerialDescriptor(kClass.simpleName ?: "Enum", PrimitiveKind.STRING)
-
-    override fun serialize(encoder: Encoder, value: T) {
-        val snakeCase = value.name
-            .replace(Regex("([a-z0-9])([A-Z])"), "$1_$2")
-            .lowercase()
-        encoder.encodeString(snakeCase)
-    }
 }
 
 internal object KeySerializer : PackedSerializer<Key>() {

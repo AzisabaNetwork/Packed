@@ -66,7 +66,7 @@ data class PackTtfFontProvider(
     @Serializable(with = ShiftSerializer::class)
     data class Shift(val horizontal: Int, val vertical: Int)
 
-    private object ShiftSerializer : PackedSerializer<Shift>() {
+    object ShiftSerializer : PackedSerializer<Shift>() {
         @OptIn(InternalSerializationApi::class)
         override val descriptor: SerialDescriptor = buildSerialDescriptor("Shift", StructureKind.LIST)
 

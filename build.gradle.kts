@@ -16,7 +16,9 @@ repositories {
 dependencies {
     api(libs.ktor.server.core)
     api(libs.ktor.server.netty)
-    compileOnly(libs.io.papermc.paper.api)
+    compileOnly(libs.adventure.api)
+    compileOnly(libs.adventure.text.serializer.gson)
+    compileOnly(libs.joml)
     implementation(libs.kotlinx.serialization.json)
     testImplementation(kotlin("test"))
 }
