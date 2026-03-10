@@ -14,8 +14,8 @@ on:
         options:
           - all
           - core
-          - resource-pack
-          - ktor-paper
+          - resource
+          - server
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}

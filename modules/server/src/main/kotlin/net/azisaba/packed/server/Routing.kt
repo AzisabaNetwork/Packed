@@ -1,10 +1,9 @@
-package net.azisaba.packed.ktor
+package net.azisaba.packed.server
 
-import io.ktor.http.HttpHeaders
-import io.ktor.server.application.Application
-import io.ktor.server.response.respondFile
-import io.ktor.server.routing.get
-import io.ktor.server.routing.routing
+import io.ktor.http.*
+import io.ktor.server.application.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 import java.nio.file.Path
 
 internal fun Application.configureRouting(zipPath: Path) {
