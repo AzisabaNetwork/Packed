@@ -20,6 +20,50 @@ sealed interface Translation {
         fun placeholder(): Translation = PlaceholderTranslation
 
         fun placeholder(index: Int): Translation = IndexedPlaceholderTranslation(index)
+
+        fun black(): Translation = LegacyStyleTranslation('0')
+
+        fun darkBlue(): Translation = LegacyStyleTranslation('1')
+
+        fun darkGreen(): Translation = LegacyStyleTranslation('2')
+
+        fun darkAqua(): Translation = LegacyStyleTranslation('3')
+
+        fun darkRed(): Translation = LegacyStyleTranslation('4')
+
+        fun darkPurple(): Translation = LegacyStyleTranslation('5')
+
+        fun gold(): Translation = LegacyStyleTranslation('6')
+
+        fun gray(): Translation = LegacyStyleTranslation('7')
+
+        fun darkGray(): Translation = LegacyStyleTranslation('8')
+
+        fun blue(): Translation = LegacyStyleTranslation('9')
+
+        fun green(): Translation = LegacyStyleTranslation('a')
+
+        fun aqua(): Translation = LegacyStyleTranslation('b')
+
+        fun red(): Translation = LegacyStyleTranslation('c')
+
+        fun lightPurple(): Translation = LegacyStyleTranslation('d')
+
+        fun yellow(): Translation = LegacyStyleTranslation('e')
+
+        fun white(): Translation = LegacyStyleTranslation('f')
+
+        fun obfuscated(): Translation = LegacyStyleTranslation('k')
+
+        fun bold(): Translation = LegacyStyleTranslation('l')
+
+        fun strikethrough(): Translation = LegacyStyleTranslation('m')
+
+        fun underline(): Translation = LegacyStyleTranslation('n')
+
+        fun italic(): Translation = LegacyStyleTranslation('o')
+
+        fun resetStyle(): Translation = LegacyStyleTranslation('r')
     }
 }
 
@@ -42,6 +86,10 @@ private object PlaceholderTranslation : Translation {
 
 private data class IndexedPlaceholderTranslation(val index: Int) : Translation {
     override fun toString(): String = $$"%$$index$s"
+}
+
+private data class LegacyStyleTranslation(val magic: Char) : Translation {
+    override fun toString(): String = "§$magic"
 }
 
 @ApiStatus.Internal
