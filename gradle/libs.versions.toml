@@ -4,7 +4,7 @@ kotlinx-serialization-json = "1.10.0-RC"
 adventure = "4.26.1"
 joml = "1.10.8"
 ktor = "3.4.0"
-minecraftserialization = "1.0.0-R0.4-SNAPSHOT"
+minecraftserialization = "1.0.0-R0.5-SNAPSHOT"
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

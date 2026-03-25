@@ -2,6 +2,9 @@ package net.azisaba.packed.items.properties
 
 import kotlinx.serialization.EncodeDefault
 import kotlinx.serialization.Serializable
+import net.azisaba.packed.PackedKey
+import net.azisaba.packed.PackedKeySerializer
+import net.azisaba.packed.models.PackModel
 import net.azisaba.serialization.KeySerializer
 import net.kyori.adventure.key.Key
 
@@ -12,8 +15,8 @@ sealed interface PackItemModelProperties {
 
 @Serializable
 data class PackModelItemModelProperties(
-    @Serializable(with = KeySerializer::class)
-    val model: Key,
+    @Serializable(with = PackedKeySerializer::class)
+    val model: PackedKey<PackModel>,
     val tints: List<PackTintSource>? = null,
 ) : PackItemModelProperties {
     @EncodeDefault
