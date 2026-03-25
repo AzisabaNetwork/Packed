@@ -20,6 +20,7 @@ java { toolchain.languageVersion.set(JavaLanguageVersion.of(21)) }
 val adventure = libs.adventure
 val joml = libs.joml
 val kotlinx = libs.kotlinx
+val minecraftSerialization = libs.minecraftserialization
 
 subprojects {
     group = rootProject.group
@@ -32,6 +33,8 @@ subprojects {
 
     repositories {
         mavenCentral()
+        maven("https://repo.azisaba.net/repository/maven-public/")
+        maven("https://repo.azisaba.net/repository/maven-snapshots/")
     }
 
     dependencies {
@@ -39,6 +42,8 @@ subprojects {
         compileOnly(adventure.text.serializer.gson)
         compileOnly(joml)
         implementation(kotlinx.serialization.json)
+        implementation(minecraftSerialization.adventure)
+        implementation(minecraftSerialization.joml)
         testImplementation(kotlin("test"))
     }
 
@@ -54,12 +59,11 @@ subprojects {
         repositories {
             maven {
                 name = "azisaba"
-                url =
-                    if (version.toString().contains("SNAPSHOT")) {
-                        uri("https://repo.azisaba.net/repository/maven-snapshots/")
-                    } else {
-                        uri("https://repo.azisaba.net/repository/maven-releases/")
-                    }
+                url = if (version.toString().contains("SNAPSHOT")) {
+                    uri("https://repo.azisaba.net/repository/maven-snapshots/")
+                } else {
+                    uri("https://repo.azisaba.net/repository/maven-releases/")
+                }
                 credentials {
                     username = System.getenv("REPO_USERNAME")
                     password = System.getenv("REPO_PASSWORD")

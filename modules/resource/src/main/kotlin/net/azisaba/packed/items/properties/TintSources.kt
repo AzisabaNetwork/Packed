@@ -1,9 +1,9 @@
 package net.azisaba.packed.items.properties
 
-import net.azisaba.packed.KeySerializer
-import net.azisaba.packed.RGBLikeSerializer
 import kotlinx.serialization.EncodeDefault
 import kotlinx.serialization.Serializable
+import net.azisaba.serialization.KeySerializer
+import net.azisaba.serialization.RGBIntSerializer
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.util.RGBLike
 
@@ -15,7 +15,7 @@ sealed interface PackTintSource {
 
 @Serializable
 data class PackConstantTintSource(
-    @Serializable(with = RGBLikeSerializer::class)
+    @Serializable(with = RGBIntSerializer::class)
     val value: RGBLike,
 ) : PackTintSource {
     @EncodeDefault
@@ -24,7 +24,7 @@ data class PackConstantTintSource(
 
 @Serializable
 data class PackDyeTintSource(
-    @Serializable(with = RGBLikeSerializer::class)
+    @Serializable(with = RGBIntSerializer::class)
     val default: RGBLike,
 ) : PackTintSource {
     @EncodeDefault
@@ -33,7 +33,7 @@ data class PackDyeTintSource(
 
 @Serializable
 data class PackFireworkTintSource(
-    @Serializable(with = RGBLikeSerializer::class)
+    @Serializable(with = RGBIntSerializer::class)
     val default: RGBLike,
 ) : PackTintSource {
     @EncodeDefault
@@ -51,7 +51,7 @@ data class PackGrassTintSource(
 
 @Serializable
 data class PackMapColor(
-    @Serializable(with = RGBLikeSerializer::class)
+    @Serializable(with = RGBIntSerializer::class)
     val default: RGBLike,
 ) : PackTintSource {
     @EncodeDefault
@@ -60,7 +60,7 @@ data class PackMapColor(
 
 @Serializable
 data class PackPotionTintSource(
-    @Serializable(with = RGBLikeSerializer::class)
+    @Serializable(with = RGBIntSerializer::class)
     val default: RGBLike,
 ) : PackTintSource {
     @EncodeDefault
@@ -69,7 +69,7 @@ data class PackPotionTintSource(
 
 @Serializable
 data class PackTeamTintSource(
-    @Serializable(with = RGBLikeSerializer::class)
+    @Serializable(with = RGBIntSerializer::class)
     val default: RGBLike,
 ) : PackTintSource {
     @EncodeDefault

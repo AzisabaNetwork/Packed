@@ -1,10 +1,10 @@
 package net.azisaba.packed.models
 
 import net.azisaba.packed.PackDirection
-import net.azisaba.packed.Vector3icSerializer
-import net.azisaba.packed.Vector4fcSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import net.azisaba.serialization.Vector3icSerializer
+import net.azisaba.serialization.Vector4fcSerializer
 import org.joml.Vector3ic
 import org.joml.Vector4fc
 

@@ -1,6 +1,5 @@
 package net.azisaba.packed.font.provider
 
-import net.azisaba.packed.KeySerializer
 import net.azisaba.packed.PackedSerializer
 import kotlinx.serialization.EncodeDefault
 import kotlinx.serialization.InternalSerializationApi
@@ -9,6 +8,7 @@ import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.descriptors.StructureKind
 import kotlinx.serialization.descriptors.buildSerialDescriptor
 import kotlinx.serialization.encoding.Encoder
+import net.azisaba.serialization.KeySerializer
 import net.kyori.adventure.key.Key
 
 @Serializable

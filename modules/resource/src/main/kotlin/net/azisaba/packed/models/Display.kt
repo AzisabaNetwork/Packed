@@ -1,8 +1,8 @@
 package net.azisaba.packed.models
 
-import net.azisaba.packed.Vector3icSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import net.azisaba.serialization.Vector3icSerializer
 import org.joml.Vector3ic
 
 @Serializable

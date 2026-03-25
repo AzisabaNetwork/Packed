@@ -2,10 +2,10 @@ package net.azisaba.packed.models
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import net.azisaba.packed.KeySerializer
 import net.azisaba.packed.PackedKey
 import net.azisaba.packed.PackedKeySerializer
 import net.azisaba.packed.model
+import net.azisaba.serialization.KeySerializer
 import net.kyori.adventure.key.Key
 
 @Serializable

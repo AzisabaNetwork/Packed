@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Plugin version. ex: x.x.x, x.x.x-SNAPSHOT'
+        description: 'Library version. ex: x.x.x, x.x.x-SNAPSHOT'
         required: true
       module:
         description: 'Module to publish'

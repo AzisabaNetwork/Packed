@@ -2,7 +2,7 @@ package net.azisaba.packed.items.properties
 
 import kotlinx.serialization.EncodeDefault
 import kotlinx.serialization.Serializable
-import net.azisaba.packed.KeySerializer
+import net.azisaba.serialization.KeySerializer
 import net.kyori.adventure.key.Key
 
 @Serializable

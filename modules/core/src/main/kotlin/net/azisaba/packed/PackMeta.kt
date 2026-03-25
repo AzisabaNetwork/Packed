@@ -1,6 +1,7 @@
 package net.azisaba.packed
 
 import kotlinx.serialization.Serializable
+import net.azisaba.serialization.ComponentJsonSerializer
 import net.kyori.adventure.text.Component
 
 @Serializable
@@ -10,7 +11,7 @@ data class PackMeta(val pack: Info) {
         val minFormat: PackFormat,
         val maxFormat: PackFormat,
         val packFormat: Int?,
-        @Serializable(with = ComponentSerializer::class)
+        @Serializable(with = ComponentJsonSerializer::class)
         val description: Component,
     )
 }

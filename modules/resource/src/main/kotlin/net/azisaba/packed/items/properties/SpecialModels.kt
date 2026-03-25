@@ -3,9 +3,9 @@ package net.azisaba.packed.items.properties
 import kotlinx.serialization.EncodeDefault
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import net.azisaba.packed.KeySerializer
 import net.azisaba.packed.PackDirection
 import net.azisaba.packed.PackDyeColor
+import net.azisaba.serialization.KeySerializer
 import net.kyori.adventure.key.Key
 
 @Serializable
