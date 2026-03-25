@@ -2,20 +2,21 @@ package net.azisaba.packed.equipment
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import net.azisaba.serialization.RGBLikeIntSerializer
+import net.azisaba.serialization.KeySerializer
+import net.azisaba.serialization.RGBIntSerializer
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.util.RGBLike
 
 @Serializable
 data class PackEquipmentLayer(
-    @Serializable(with = RGBLikeIntSerializer::class)
+    @Serializable(with = KeySerializer::class)
     val texture: Key,
     val dyeable: Dyeable? = null,
     val usePlayerTexture: Boolean? = null,
 ) {
     @Serializable
     data class Dyeable(
-        @Serializable(with = RGBLikeIntSerializer::class)
+        @Serializable(with = RGBIntSerializer::class)
         val colorWhenUndyed: RGBLike,
     )
 }
