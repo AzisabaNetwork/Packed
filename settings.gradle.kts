@@ -3,6 +3,6 @@ plugins {
 }
 rootProject.name = "packed"
 
-include("modules:core")
-include("modules:resource")
-include("modules:server")
+include(":modules:core")
+include(":modules:resource")
+include(":modules:server")
