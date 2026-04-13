@@ -4,6 +4,9 @@ import java.nio.file.FileSystems
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardCopyOption
+import java.nio.file.FileSystemNotFoundException
+import java.net.URI
+import kotlin.collections.emptyMap
 import kotlin.io.path.createDirectories
 import kotlin.io.path.isDirectory
 import kotlin.io.path.isRegularFile
@@ -31,22 +34,38 @@ fun interface PackedSource : PackedExportable {
 
         fun javaResources(kClass: KClass<*>, sourceSubPath: String, targetSubPath: String): PackedSource =
             PackedSource { context ->
-                val sourcePath = Path.of(kClass.java.protectionDomain.codeSource.location.toURI())
-
                 fun copy(root: Path) {
                     val sourceRoot = root.resolve(sourceSubPath)
                     val targetRoot = context.pathResolver.rootPath.resolve(targetSubPath)
                     copyTree(sourceRoot, targetRoot)
                 }
 
-                if (sourcePath.isDirectory()) {
-                    copy(sourcePath)
-                } else {
-                    FileSystems.newFileSystem(sourcePath).use { fs ->
-                        copy(fs.getPath("/"))
+                val sourceUri: URI = kClass.java.protectionDomain.codeSource.location.toURI()
+                when (sourceUri.scheme) {
+                    "jar" -> withFileSystem(sourceUri) { fileSystem ->
+                        copy(fileSystem.getPath("/"))
+                    }
+
+                    else -> {
+                        val sourcePath = Path.of(sourceUri)
+                        if (sourcePath.isDirectory()) {
+                            copy(sourcePath)
+                        } else {
+                            FileSystems.newFileSystem(sourcePath).use { fs ->
+                                copy(fs.getPath("/"))
+                            }
+                        }
                     }
                 }
             }
+
+        private fun withFileSystem(uri: URI, action: (java.nio.file.FileSystem) -> Unit) {
+            try {
+                action(FileSystems.getFileSystem(uri))
+            } catch (_: FileSystemNotFoundException) {
+                FileSystems.newFileSystem(uri, emptyMap<String, Any>()).use(action)
+            }
+        }
 
         private fun copyTree(sourceRoot: Path, targetRoot: Path) {
             if (!sourceRoot.isDirectory()) return
