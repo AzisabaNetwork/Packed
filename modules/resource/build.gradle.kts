@@ -1,3 +1,3 @@
 dependencies {
-    compileOnly(project(":modules:core"))
+    api(project(":modules:core"))
 }
