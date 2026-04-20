@@ -4,6 +4,7 @@ import kotlinx.serialization.EncodeDefault
 import kotlinx.serialization.Serializable
 import net.azisaba.packed.PackedKey
 import net.azisaba.packed.PackedKeySerializer
+import net.azisaba.packed.items.PackItemModel
 import net.azisaba.packed.models.PackModel
 import net.azisaba.serialization.KeySerializer
 import net.kyori.adventure.key.Key
@@ -29,11 +30,15 @@ data class PackSpecialItemModelProperties(
     @Serializable(with = KeySerializer::class)
     val base: Key,
     val model: PackSpecialModel,
-)
+) : PackItemModelProperties {
+    @EncodeDefault
+    @Serializable(with = KeySerializer::class)
+    override val type: Key = Key.key("special")
+}
 
 @Serializable
 data class PackCompositeItemModelProperties(
-    val models: List<PackItemModelProperties>,
+    val models: List<PackItemModel>,
 ) : PackItemModelProperties {
     @EncodeDefault
     override val type: Key = Key.key("composite")
