@@ -38,7 +38,7 @@ data class PackSpecialItemModelProperties(
 
 @Serializable
 data class PackCompositeItemModelProperties(
-    val models: List<PackItemModel>,
+    val models: List<PackItemModelProperties>,
 ) : PackItemModelProperties {
     @EncodeDefault
     @Serializable(with = KeySerializer::class)
