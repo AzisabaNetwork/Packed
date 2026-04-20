@@ -41,17 +41,20 @@ data class PackCompositeItemModelProperties(
     val models: List<PackItemModel>,
 ) : PackItemModelProperties {
     @EncodeDefault
+    @Serializable(with = KeySerializer::class)
     override val type: Key = Key.key("composite")
 }
 
 @Serializable
 class PackEmptyItemModelProperties : PackItemModelProperties {
     @EncodeDefault
+    @Serializable(with = KeySerializer::class)
     override val type: Key = Key.key("empty")
 }
 
 @Serializable
 class PackBundleSelectedItemItemModelProperties : PackItemModelProperties {
     @EncodeDefault
+    @Serializable(with = KeySerializer::class)
     override val type: Key = Key.key("bundle/selected_item")
 }
