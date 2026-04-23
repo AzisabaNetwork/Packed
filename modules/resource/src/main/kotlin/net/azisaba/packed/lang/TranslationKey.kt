@@ -7,7 +7,6 @@ import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import net.kyori.adventure.key.Key
 import net.kyori.adventure.translation.Translatable
 import org.jetbrains.annotations.ApiStatus
 
@@ -15,16 +14,6 @@ import org.jetbrains.annotations.ApiStatus
 sealed interface TranslationKey : Translatable {
     companion object {
         fun key(key: String): TranslationKey = TranslationKeyImpl(key)
-
-        fun block(key: Key): TranslationKey = key("block.${key.namespace()}.${key.value()}")
-
-        fun item(key: Key): TranslationKey = key("item.${key.namespace()}.${key.value()}")
-
-        fun entity(key: Key): TranslationKey = key("entity.${key.namespace()}.${key.value()}")
-
-        fun effect(key: Key): TranslationKey = key("effect.${key.namespace()}.${key.value()}")
-
-        fun biome(key: Key): TranslationKey = key("biome.${key.namespace()}.${key.value()}")
     }
 }
 

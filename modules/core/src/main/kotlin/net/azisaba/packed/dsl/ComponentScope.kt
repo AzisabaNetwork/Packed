@@ -9,7 +9,7 @@ import net.azisaba.packed.PackedKey
 class ComponentScope<T : Any> internal constructor(private val factory: (PackedEntries<T>) -> PackedComponent<T>) {
     private val mutableEntries: MutablePackedEntries<T> = mutableMapOf()
 
-    infix fun PackedKey<T>.to(value: T) {
+    infix fun PackedKey<T>.bind(value: T) {
         mutableEntries[this] = value
     }
 
