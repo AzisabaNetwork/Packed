@@ -1,3 +1,3 @@
 package net.azisaba.packed.lang
 
-typealias PackLanguage = Map<String, Translation>
+typealias PackLanguage = Map<TranslationKey, Translation>

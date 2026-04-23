@@ -1,11 +1,12 @@
 package net.azisaba.packed.lang
 
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import net.azisaba.packed.PackedSerializer
 import org.jetbrains.annotations.ApiStatus
 
 @Serializable(with = TranslationSerializer::class)
@@ -93,11 +94,14 @@ private data class LegacyStyleTranslation(val magic: Char) : Translation {
 }
 
 @ApiStatus.Internal
-object TranslationSerializer : PackedSerializer<Translation>() {
+object TranslationSerializer : KSerializer<Translation> {
     override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("Translation", PrimitiveKind.STRING)
 
     override fun serialize(encoder: Encoder, value: Translation) {
         encoder.encodeString(value.toString())
     }
-}
 
+    override fun deserialize(decoder: Decoder): Translation {
+        return LiteralTranslation(decoder.decodeString())
+    }
+}

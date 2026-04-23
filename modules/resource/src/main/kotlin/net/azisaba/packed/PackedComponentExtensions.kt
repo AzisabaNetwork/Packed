@@ -9,6 +9,7 @@ import net.azisaba.packed.font.PackFont
 import net.azisaba.packed.items.PackItemModel
 import net.azisaba.packed.lang.PackLanguage
 import net.azisaba.packed.lang.Translation
+import net.azisaba.packed.lang.TranslationKey
 import net.azisaba.packed.models.PackModel
 import net.azisaba.packed.sounds.PackSoundEvent
 
@@ -36,7 +37,7 @@ fun PackedComponent.Companion.itemModel(entries: PackedEntries<PackItemModel>): 
 fun PackedComponent.Companion.language(entries: PackedEntries<PackLanguage>): PackedComponent<PackLanguage> =
     PackedComponent.JsonFilePerEntry(
         entries,
-        MapSerializer(String.serializer(), Translation.serializer()),
+        MapSerializer(TranslationKey.serializer(), Translation.serializer()),
         "lang",
     )
 

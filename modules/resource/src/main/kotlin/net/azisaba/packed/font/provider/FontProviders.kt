@@ -1,12 +1,11 @@
 package net.azisaba.packed.font.provider
 
-import net.azisaba.packed.PackedSerializer
-import kotlinx.serialization.EncodeDefault
-import kotlinx.serialization.InternalSerializationApi
-import kotlinx.serialization.Serializable
+import kotlinx.serialization.*
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.descriptors.StructureKind
 import kotlinx.serialization.descriptors.buildSerialDescriptor
+import kotlinx.serialization.encoding.CompositeDecoder
+import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import net.azisaba.serialization.KeySerializer
 import net.kyori.adventure.key.Key
@@ -66,7 +65,7 @@ data class PackTtfFontProvider(
     @Serializable(with = ShiftSerializer::class)
     data class Shift(val horizontal: Int, val vertical: Int)
 
-    object ShiftSerializer : PackedSerializer<Shift>() {
+    object ShiftSerializer : KSerializer<Shift> {
         @OptIn(InternalSerializationApi::class)
         override val descriptor: SerialDescriptor = buildSerialDescriptor("Shift", StructureKind.LIST)
 
@@ -75,6 +74,32 @@ data class PackTtfFontProvider(
             composite.encodeIntElement(descriptor, 0, value.horizontal)
             composite.encodeIntElement(descriptor, 1, value.vertical)
             composite.endStructure(descriptor)
+        }
+
+        override fun deserialize(decoder: Decoder): Shift {
+            val compositeDecoder = decoder.beginStructure(descriptor)
+
+            val values = if (compositeDecoder.decodeSequentially()) {
+                mapOf(
+                    0 to compositeDecoder.decodeIntElement(descriptor, 0),
+                    1 to compositeDecoder.decodeIntElement(descriptor, 1),
+                )
+            } else buildMap {
+                while (true) {
+                    when (val index = compositeDecoder.decodeElementIndex(descriptor)) {
+                        CompositeDecoder.DECODE_DONE -> break
+                        0, 1 -> put(index, compositeDecoder.decodeIntElement(descriptor, index))
+                        else -> throw SerializationException("Unexpected index: $index")
+                    }
+                }
+            }
+
+            compositeDecoder.endStructure(descriptor)
+
+            val horizontal = values[0] ?: throw SerializationException("Missing 'horizontal'")
+            val vertical = values[1] ?: throw SerializationException("Missing 'vertical'")
+
+            return Shift(horizontal, vertical)
         }
     }
 }
